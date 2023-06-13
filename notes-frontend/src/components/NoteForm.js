@@ -9,13 +9,15 @@ const styles = {
   gap: "8px",
 };
 
-const NoteForm = ({ addNote }) => {
+const NoteForm = ({ addNote, newNote, handleNoteChange }) => {
   return (
     <form onSubmit={addNote} style={styles}>
       <TextField
         id="outlined-basic"
         label="New Note"
         variant="outlined"
+        value={newNote}
+        onChange={handleNoteChange}
         sx={{ width: "40vw" }}
       />
       <Button type="submit" variant="contained" size="small">

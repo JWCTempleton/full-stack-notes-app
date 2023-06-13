@@ -27,16 +27,26 @@ const notes = [
 
 function App() {
   const [allNotes, setAllNotes] = useState(notes);
+  const [newNote, setNewNote] = useState("");
 
   const addNote = (event) => {
     event.preventDefault();
     console.log("button clicked", event.target);
   };
 
+  const handleNoteChange = (event) => {
+    console.log("note:", event.target.value);
+    setNewNote(event.target.value);
+  };
+
   return (
     <div className="App">
       <h1>Note App</h1>
-      <NoteForm addNote={addNote} />
+      <NoteForm
+        addNote={addNote}
+        newNote={newNote}
+        handleNoteChange={handleNoteChange}
+      />
       <Box
         sx={{
           p: 3,
