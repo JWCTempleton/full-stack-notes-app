@@ -5,7 +5,6 @@ import { Button, Typography, Paper } from "@mui/material";
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   color: theme.palette.text.secondary,
-  height: 80,
   lineHeight: "60px",
   display: "flex",
   alignItems: "flex-start",

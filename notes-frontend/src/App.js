@@ -31,7 +31,13 @@ function App() {
 
   const addNote = (event) => {
     event.preventDefault();
-    console.log("button clicked", event.target);
+    const noteObject = {
+      content: newNote,
+      important: Math.random() < 0.5,
+      id: notes.length + 1,
+    };
+    setAllNotes(allNotes.concat(noteObject));
+    setNewNote("");
   };
 
   const handleNoteChange = (event) => {
