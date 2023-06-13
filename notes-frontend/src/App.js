@@ -1,20 +1,6 @@
 import "./App.css";
-import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
-import { styled } from "@mui/material/styles";
-import { Button, Typography } from "@mui/material";
-
-const Item = styled(Paper)(({ theme }) => ({
-  ...theme.typography.body2,
-  color: theme.palette.text.secondary,
-  height: 80,
-  lineHeight: "60px",
-  display: "flex",
-  alignItems: "flex-start",
-  flexDirection: "column",
-  padding: "25px 16px",
-  gap: "6px",
-}));
+import Note from "./components/Note";
 
 function App() {
   const notes = [
@@ -52,17 +38,7 @@ function App() {
         }}
       >
         {notes.map((note) => {
-          return (
-            <Item key={note.id} elevation={6}>
-              <Typography
-                sx={{ fontWeight: "bold" }}
-              >{`${note.content}`}</Typography>
-              <Typography>{`Created by: ${note.user}`}</Typography>
-              <Button variant="contained" size="small">
-                important
-              </Button>
-            </Item>
-          );
+          return <Note note={note} />;
         })}
       </Box>
     </div>
