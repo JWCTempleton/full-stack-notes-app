@@ -3,7 +3,7 @@ import { TextField, Button } from "@mui/material";
 const styles = {
   display: "flex",
   flexDirection: "column",
-  width: "50vw",
+  width: "65vw",
   alignItems: "center",
   margin: "10px auto",
   gap: "8px",

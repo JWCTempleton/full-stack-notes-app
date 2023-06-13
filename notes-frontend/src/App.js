@@ -1,5 +1,5 @@
 import "./App.css";
-import Box from "@mui/material/Box";
+import { Box, Button } from "@mui/material";
 import Note from "./components/Note";
 import { useState } from "react";
 import NoteForm from "./components/NoteForm";
@@ -28,6 +28,7 @@ const notes = [
 function App() {
   const [allNotes, setAllNotes] = useState(notes);
   const [newNote, setNewNote] = useState("");
+  const [showAll, setShowAll] = useState(true);
 
   const addNote = (event) => {
     event.preventDefault();
@@ -45,6 +46,10 @@ function App() {
     setNewNote(event.target.value);
   };
 
+  const notesToDisplay = showAll
+    ? allNotes
+    : allNotes.filter((note) => note.important);
+
   return (
     <div className="App">
       <h1>Note App</h1>
@@ -59,12 +64,19 @@ function App() {
           bgcolor: "background.default",
           display: "flex",
           flexDirection: "column",
-          width: "50vw",
+          width: "65vw",
           gap: 3,
           margin: "0 auto",
         }}
       >
-        {allNotes.map((note) => {
+        <Button
+          variant="contained"
+          onClick={() => setShowAll(!showAll)}
+          sx={{ alignSelf: "center" }}
+        >
+          {showAll ? "Filter Important" : "Show All"}
+        </Button>
+        {notesToDisplay.map((note) => {
           return <Note key={note.id} note={note} />;
         })}
       </Box>
