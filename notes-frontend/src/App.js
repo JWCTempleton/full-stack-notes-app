@@ -1,31 +1,42 @@
 import "./App.css";
 import Box from "@mui/material/Box";
 import Note from "./components/Note";
+import { useState } from "react";
+import NoteForm from "./components/NoteForm";
+
+const notes = [
+  {
+    id: 1,
+    content: "Notes app working",
+    important: true,
+    user: "JWCT",
+  },
+  {
+    id: 2,
+    content: "React app",
+    important: false,
+    user: "JWCT",
+  },
+  {
+    id: 3,
+    content: "GET and POST are important methods of HTTP protocol",
+    important: true,
+    user: "John Doe",
+  },
+];
 
 function App() {
-  const notes = [
-    {
-      id: 1,
-      content: "Notes app working",
-      important: true,
-      user: "JWCT",
-    },
-    {
-      id: 2,
-      content: "React app",
-      important: false,
-      user: "JWCT",
-    },
-    {
-      id: 3,
-      content: "GET and POST are important methods of HTTP protocol",
-      important: true,
-      user: "John Doe",
-    },
-  ];
+  const [allNotes, setAllNotes] = useState(notes);
+
+  const addNote = (event) => {
+    event.preventDefault();
+    console.log("button clicked", event.target);
+  };
+
   return (
     <div className="App">
       <h1>Note App</h1>
+      <NoteForm addNote={addNote} />
       <Box
         sx={{
           p: 3,
@@ -37,8 +48,8 @@ function App() {
           margin: "0 auto",
         }}
       >
-        {notes.map((note) => {
-          return <Note note={note} />;
+        {allNotes.map((note) => {
+          return <Note key={note.id} note={note} />;
         })}
       </Box>
     </div>
