@@ -11,7 +11,7 @@ function App() {
   const [showAll, setShowAll] = useState(true);
 
   useEffect(() => {
-    noteService.getAll().then((response) => setAllNotes(response.data));
+    noteService.getAll().then((initialNotes) => setAllNotes(initialNotes));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -22,10 +22,8 @@ function App() {
       important: Math.random() < 0.5,
     };
 
-    noteService.create(noteObject).then((response) => {
-      console.log(response);
-      setAllNotes(allNotes.concat(response.data));
-      setNewNote("");
+    noteService.create(noteObject).then((returnedNote) => {
+      setAllNotes(allNotes.concat(returnedNote));
     });
   };
 
@@ -37,9 +35,9 @@ function App() {
     const note = allNotes.find((note) => note.id === id);
     const updatedNote = { ...note, important: !note.important };
 
-    noteService.update(id, updatedNote).then((response) => {
+    noteService.update(id, updatedNote).then((returnedNote) => {
       setAllNotes(
-        allNotes.map((note) => (note.id !== id ? note : response.data))
+        allNotes.map((note) => (note.id !== id ? note : returnedNote))
       );
     });
   };

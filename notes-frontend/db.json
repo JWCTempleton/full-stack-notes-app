@@ -3,7 +3,7 @@
     {
       "id": 1,
       "content": "Notes app working",
-      "important": false,
+      "important": true,
       "user": "JWCT"
     },
     {
