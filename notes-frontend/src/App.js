@@ -1,49 +1,50 @@
 import "./App.css";
 import { Box, Button } from "@mui/material";
 import Note from "./components/Note";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NoteForm from "./components/NoteForm";
-
-const notes = [
-  {
-    id: 1,
-    content: "Notes app working",
-    important: true,
-    user: "JWCT",
-  },
-  {
-    id: 2,
-    content: "React app",
-    important: false,
-    user: "JWCT",
-  },
-  {
-    id: 3,
-    content: "GET and POST are important methods of HTTP protocol",
-    important: true,
-    user: "John Doe",
-  },
-];
+import axios from "axios";
 
 function App() {
-  const [allNotes, setAllNotes] = useState(notes);
+  const [allNotes, setAllNotes] = useState([]);
   const [newNote, setNewNote] = useState("");
   const [showAll, setShowAll] = useState(true);
+
+  const url = `http://localhost:3002/notes`;
+
+  useEffect(() => {
+    axios.get(url).then((response) => setAllNotes(response.data));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const addNote = (event) => {
     event.preventDefault();
     const noteObject = {
       content: newNote,
       important: Math.random() < 0.5,
-      id: notes.length + 1,
     };
-    setAllNotes(allNotes.concat(noteObject));
-    setNewNote("");
+
+    axios.post("http://localhost:3002/notes", noteObject).then((response) => {
+      console.log(response);
+      setAllNotes(allNotes.concat(response.data));
+      setNewNote("");
+    });
   };
 
   const handleNoteChange = (event) => {
-    console.log("note:", event.target.value);
     setNewNote(event.target.value);
+  };
+
+  const toggleImportance = (id) => {
+    const toggleUrl = `${url}/${id}`;
+    const note = allNotes.find((note) => note.id === id);
+    const updatedNote = { ...note, important: !note.important };
+
+    axios.put(toggleUrl, updatedNote).then((response) => {
+      setAllNotes(
+        allNotes.map((note) => (note.id !== id ? note : response.data))
+      );
+    });
   };
 
   const notesToDisplay = showAll
@@ -78,7 +79,13 @@ function App() {
           {showAll ? "Important" : "All"}
         </Button>
         {notesToDisplay.map((note) => {
-          return <Note key={note.id} note={note} />;
+          return (
+            <Note
+              key={note.id}
+              note={note}
+              toggleImportance={() => toggleImportance(note.id)}
+            />
+          );
         })}
       </Box>
     </div>

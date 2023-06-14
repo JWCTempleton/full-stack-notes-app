@@ -13,7 +13,7 @@ const Item = styled(Paper)(({ theme }) => ({
   gap: "6px",
 }));
 
-const Note = ({ note }) => {
+const Note = ({ note, toggleImportance }) => {
   return (
     <Item key={note.id} elevation={6}>
       <Typography
@@ -21,7 +21,7 @@ const Note = ({ note }) => {
         sx={{ fontWeight: "bold", textAlign: "left" }}
       >{`${note.content}`}</Typography>
       <Typography>{`Created by: ${note.user}`}</Typography>
-      <Button variant="outlined" size="small">
+      <Button variant="outlined" size="small" onClick={toggleImportance}>
         {note.important ? "Important" : "Unimportant"}
       </Button>
     </Item>
