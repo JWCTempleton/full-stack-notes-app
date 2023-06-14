@@ -3,17 +3,15 @@ import { Box, Button } from "@mui/material";
 import Note from "./components/Note";
 import { useEffect, useState } from "react";
 import NoteForm from "./components/NoteForm";
-import axios from "axios";
+import { noteService } from "./services/notes";
 
 function App() {
   const [allNotes, setAllNotes] = useState([]);
   const [newNote, setNewNote] = useState("");
   const [showAll, setShowAll] = useState(true);
 
-  const url = `http://localhost:3002/notes`;
-
   useEffect(() => {
-    axios.get(url).then((response) => setAllNotes(response.data));
+    noteService.getAll().then((response) => setAllNotes(response.data));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -24,7 +22,7 @@ function App() {
       important: Math.random() < 0.5,
     };
 
-    axios.post("http://localhost:3002/notes", noteObject).then((response) => {
+    noteService.create(noteObject).then((response) => {
       console.log(response);
       setAllNotes(allNotes.concat(response.data));
       setNewNote("");
@@ -36,11 +34,10 @@ function App() {
   };
 
   const toggleImportance = (id) => {
-    const toggleUrl = `${url}/${id}`;
     const note = allNotes.find((note) => note.id === id);
     const updatedNote = { ...note, important: !note.important };
 
-    axios.put(toggleUrl, updatedNote).then((response) => {
+    noteService.update(id, updatedNote).then((response) => {
       setAllNotes(
         allNotes.map((note) => (note.id !== id ? note : response.data))
       );
