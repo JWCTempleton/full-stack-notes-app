@@ -16,9 +16,12 @@ const Item = styled(Paper)(({ theme }) => ({
 const Note = ({ note }) => {
   return (
     <Item key={note.id} elevation={6}>
-      <Typography sx={{ fontWeight: "bold" }}>{`${note.content}`}</Typography>
+      <Typography
+        variant="h6"
+        sx={{ fontWeight: "bold", textAlign: "left" }}
+      >{`${note.content}`}</Typography>
       <Typography>{`Created by: ${note.user}`}</Typography>
-      <Button variant="contained" size="small">
+      <Button variant="outlined" size="small">
         {note.important ? "Important" : "Unimportant"}
       </Button>
     </Item>

@@ -71,10 +71,11 @@ function App() {
       >
         <Button
           variant="contained"
+          color="secondary"
           onClick={() => setShowAll(!showAll)}
           sx={{ alignSelf: "center" }}
         >
-          {showAll ? "Filter Important" : "Show All"}
+          {showAll ? "Important" : "All"}
         </Button>
         {notesToDisplay.map((note) => {
           return <Note key={note.id} note={note} />;
