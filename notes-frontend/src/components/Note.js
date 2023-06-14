@@ -1,6 +1,6 @@
 import { styled } from "@mui/material/styles";
 
-import { Button, Typography, Paper } from "@mui/material";
+import { Button, Typography, Paper, Box } from "@mui/material";
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -13,7 +13,7 @@ const Item = styled(Paper)(({ theme }) => ({
   gap: "6px",
 }));
 
-const Note = ({ note, toggleImportance }) => {
+const Note = ({ note, toggleImportance, handleDelete }) => {
   return (
     <Item key={note.id} elevation={6}>
       <Typography
@@ -21,9 +21,19 @@ const Note = ({ note, toggleImportance }) => {
         sx={{ fontWeight: "bold", textAlign: "left" }}
       >{`${note.content}`}</Typography>
       <Typography>{`Created by: ${note.user}`}</Typography>
-      <Button variant="outlined" size="small" onClick={toggleImportance}>
-        {note.important ? "Important" : "Unimportant"}
-      </Button>
+      <Box sx={{ display: "flex", gap: "10px" }}>
+        <Button variant="outlined" size="small" onClick={toggleImportance}>
+          {note.important ? "Important" : "Unimportant"}
+        </Button>
+        <Button
+          variant="contained"
+          size="small"
+          color="error"
+          onClick={handleDelete}
+        >
+          Delete
+        </Button>
+      </Box>
     </Item>
   );
 };

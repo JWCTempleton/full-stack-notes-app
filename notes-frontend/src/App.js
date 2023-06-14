@@ -24,6 +24,7 @@ function App() {
 
     noteService.create(noteObject).then((returnedNote) => {
       setAllNotes(allNotes.concat(returnedNote));
+      setNewNote("");
     });
   };
 
@@ -43,6 +44,14 @@ function App() {
         setAllNotes(allNotes.filter((note) => note.id !== id));
       });
     });
+  };
+
+  const handleDelete = (id) => {
+    if (window.confirm(`Do you really want to delete this note?`)) {
+      noteService.remove(id).then((returnedNote) => {
+        setAllNotes(allNotes.filter((note) => note.id !== id));
+      });
+    }
   };
 
   const notesToDisplay = showAll
@@ -82,6 +91,7 @@ function App() {
               key={note.id}
               note={note}
               toggleImportance={() => toggleImportance(note.id)}
+              handleDelete={() => handleDelete(note.id)}
             />
           );
         })}

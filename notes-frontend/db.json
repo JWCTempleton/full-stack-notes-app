@@ -17,11 +17,6 @@
       "content": "GET and POST are important methods of HTTP protocol",
       "important": true,
       "user": "John Doe"
-    },
-    {
-      "content": "This is a new note",
-      "important": true,
-      "id": 4
     }
   ]
 }
