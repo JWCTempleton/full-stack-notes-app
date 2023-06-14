@@ -38,7 +38,10 @@ function App() {
     noteService.update(id, updatedNote).then((returnedNote) => {
       setAllNotes(
         allNotes.map((note) => (note.id !== id ? note : returnedNote))
-      );
+      ).catch((error) => {
+        alert(`The note '${note.content}' was already deleted from the server`);
+        setAllNotes(allNotes.filter((note) => note.id !== id));
+      });
     });
   };
 
