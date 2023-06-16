@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
 
+app.use(cors());
 app.use(express.json());
 
 const requestLogger = (req, res, next) => {
@@ -44,6 +46,7 @@ const generateId = () => {
 };
 
 app.post("/api/notes", (request, response) => {
+  const body = request.body;
   if (!body.content) {
     return response.status(400).json({
       error: "content missing",
@@ -82,7 +85,7 @@ const unknownEndpoint = (req, res) => {
 
 app.use(unknownEndpoint);
 
-const PORT = 3003;
+const PORT = process.env.PORT || 3003;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
