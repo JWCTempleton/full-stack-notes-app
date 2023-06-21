@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const bodyParser = require("body-parser");
+const dotenv = require("dotenv");
 
 app.use(cors());
 app.use(express.static("build"));
@@ -16,26 +18,26 @@ const requestLogger = (req, res, next) => {
 
 app.use(requestLogger);
 
-let notes = [
-  {
-    id: 1,
-    content: "Notes app working",
-    important: true,
-    user: "JWCT",
-  },
-  {
-    id: 2,
-    content: "React app",
-    important: false,
-    user: "JWCT",
-  },
-  {
-    id: 3,
-    content: "GET and POST are important methods of HTTP protocol",
-    important: true,
-    user: "John Doe",
-  },
-];
+// let notes = [
+//   {
+//     id: 1,
+//     content: "Notes app working",
+//     important: true,
+//     user: "JWCT",
+//   },
+//   {
+//     id: 2,
+//     content: "React app",
+//     important: false,
+//     user: "JWCT",
+//   },
+//   {
+//     id: 3,
+//     content: "GET and POST are important methods of HTTP protocol",
+//     important: true,
+//     user: "John Doe",
+//   },
+// ];
 
 app.get("/", (request, response) => {
   response.send(`<h1>Hello World</h1>`);
