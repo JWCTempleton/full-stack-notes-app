@@ -4,6 +4,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 const usersRouter = require("./controllers/users");
+const loginRouter = require("./controllers/login");
 
 dotenv.config();
 
@@ -71,6 +72,7 @@ app.use(
 // });
 
 app.use("/api/users", usersRouter);
+app.use("/api/login", loginRouter);
 
 const unknownEndpoint = (req, res) => {
   res.status(404).send({ error: "unknown endpoint" });
