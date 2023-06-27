@@ -69,6 +69,10 @@ router.post("/", tokenExtractor, async (req, res, next) => {
   const value = [req.decodedToken.id];
 
   const { content, important, public } = req.body;
+
+  if (content === undefined) {
+    return res.status(400).json({ error: "content missing" });
+  }
   try {
     const data = await pool.query(query, value);
 
@@ -99,10 +103,6 @@ router.delete("/:id", tokenExtractor, async (req, res, next) => {
   const query = "SELECT * FROM notes WHERE note_id=$1";
   const value = [id];
 
-  // const id = parseInt(req.params.id);
-  // const query = "DELETE FROM notes where note_id=$1";
-  // const value = [id];
-
   try {
     const data = await pool.query(query, value);
 
@@ -110,10 +110,6 @@ router.delete("/:id", tokenExtractor, async (req, res, next) => {
       return res.status(404).send("Note does not exist");
     }
 
-    // return res.status(200).json({
-    //   status: 200,
-    //   message: "Note successfully deleted",
-    // });
     if (userId === data.rows[0].user_id) {
       const id = parseInt(req.params.id);
       const deleteQuery = "DELETE FROM notes where note_id=$1";
@@ -168,6 +164,10 @@ router.put("/:id", tokenExtractor, async (req, res, next) => {
         status: 200,
         message: "Note successfully updated",
       });
+    } else {
+      return res
+        .status(404)
+        .send("You don't have the authorization to complete that request");
     }
   } catch (error) {
     return next(error);
