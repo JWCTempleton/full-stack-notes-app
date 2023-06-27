@@ -1,8 +1,0 @@
-POST http://localhost:3003/api/notes
-Content-Type: application/json
-
-{
-    "content":"REST client works well",
-    "important":true,
-    "user":"JWCT"
-}

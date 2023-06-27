@@ -141,4 +141,37 @@ router.delete("/:id", tokenExtractor, async (req, res, next) => {
   }
 });
 
+router.put("/:id", tokenExtractor, async (req, res, next) => {
+  const userId = req.decodedToken.id;
+  const id = parseInt(req.params.id);
+  const query = "SELECT * FROM notes WHERE note_id=$1";
+  const value = [id];
+
+  const { important } = req.body;
+
+  try {
+    const data = await pool.query(query, value);
+
+    if (data.rowCount == 0) {
+      return res.status(404).send("Note does not exist");
+    }
+    if (userId === data.rows[0].user_id) {
+      const updateQuery = "UPDATE notes set important=$1 where note_id=$2";
+      const updateValue = [important, id];
+
+      const updateNote = await pool.query(updateQuery, updateValue);
+
+      if (updateNote.rowCount === 0) {
+        return res.status(404).send("Note was not updated");
+      }
+      return res.status(200).json({
+        status: 200,
+        message: "Note successfully updated",
+      });
+    }
+  } catch (error) {
+    return next(error);
+  }
+});
+
 module.exports = router;
