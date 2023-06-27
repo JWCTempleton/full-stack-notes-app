@@ -21,6 +21,12 @@ const requestLogger = (req, res, next) => {
   next();
 };
 
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message);
+
+  next(error);
+};
+
 app.use(requestLogger);
 app.use(bodyParser.json());
 app.use(
@@ -81,6 +87,7 @@ const unknownEndpoint = (req, res) => {
 };
 
 app.use(unknownEndpoint);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3003;
 app.listen(PORT, () => {

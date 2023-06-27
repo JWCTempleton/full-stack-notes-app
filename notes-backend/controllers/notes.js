@@ -37,6 +37,7 @@ router.get("/", async (req, res, next) => {
       data: data.rows,
     });
   } catch (error) {
+    console.log("ERROR:", error);
     return next(error);
   }
 });
@@ -92,10 +93,15 @@ router.post("/", tokenExtractor, async (req, res, next) => {
   }
 });
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", tokenExtractor, async (req, res, next) => {
+  const userId = req.decodedToken.id;
   const id = parseInt(req.params.id);
-  const query = "DELETE FROM notes where note=$1";
+  const query = "SELECT * FROM notes WHERE note_id=$1";
   const value = [id];
+
+  // const id = parseInt(req.params.id);
+  // const query = "DELETE FROM notes where note_id=$1";
+  // const value = [id];
 
   try {
     const data = await pool.query(query, value);
@@ -104,10 +110,32 @@ router.delete("/:id", async (req, res, next) => {
       return res.status(404).send("Note does not exist");
     }
 
-    return res.status(200).json({
-      status: 200,
-      message: "Note successfully deleted",
-    });
+    // return res.status(200).json({
+    //   status: 200,
+    //   message: "Note successfully deleted",
+    // });
+    if (userId === data.rows[0].user_id) {
+      const id = parseInt(req.params.id);
+      const deleteQuery = "DELETE FROM notes where note_id=$1";
+      const deleteValue = [id];
+      try {
+        const deleteData = await pool.query(deleteQuery, deleteValue);
+
+        if (deleteData.rowCount === 0) {
+          return res.status(404).send("Note does not exist");
+        }
+        return res.status(200).json({
+          status: 200,
+          message: "Note successfully deleted",
+        });
+      } catch (error) {
+        return next(error);
+      }
+    } else {
+      return res
+        .status(404)
+        .send("You don't have the authorization to complete that request");
+    }
   } catch (error) {
     return next(error);
   }
