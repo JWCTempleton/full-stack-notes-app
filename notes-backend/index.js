@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 const usersRouter = require("./controllers/users");
 const loginRouter = require("./controllers/login");
+const noteRouter = require("./controllers/notes");
 
 dotenv.config();
 
@@ -73,6 +74,7 @@ app.use(
 
 app.use("/api/users", usersRouter);
 app.use("/api/login", loginRouter);
+app.use("/api/notes", noteRouter);
 
 const unknownEndpoint = (req, res) => {
   res.status(404).send({ error: "unknown endpoint" });
