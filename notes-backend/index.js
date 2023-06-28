@@ -6,6 +6,7 @@ const dotenv = require("dotenv");
 const usersRouter = require("./controllers/users");
 const loginRouter = require("./controllers/login");
 const noteRouter = require("./controllers/notes");
+const logger = require("./utils/logger");
 
 dotenv.config();
 
@@ -91,5 +92,5 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 3003;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  logger.info(`Server running on port ${PORT}`);
 });
