@@ -11,10 +11,11 @@ function App() {
   const [showAll, setShowAll] = useState(true);
 
   useEffect(() => {
-    noteService.getAll().then((initialNotes) => setAllNotes(initialNotes));
+    noteService.getAll().then((initialNotes) => setAllNotes(initialNotes.data));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  console.log("ALL NOTES", allNotes.data);
   const addNote = (event) => {
     event.preventDefault();
     const noteObject = {

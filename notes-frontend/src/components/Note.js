@@ -20,7 +20,7 @@ const Note = ({ note, toggleImportance, handleDelete }) => {
         variant="h6"
         sx={{ fontWeight: "bold", textAlign: "left" }}
       >{`${note.content}`}</Typography>
-      <Typography>{`Created by: ${note.user}`}</Typography>
+      <Typography>{`Created by: ${note.username}`}</Typography>
       <Box sx={{ display: "flex", gap: "10px" }}>
         <Button variant="outlined" size="small" onClick={toggleImportance}>
           {note.important ? "Important" : "Unimportant"}
