@@ -31,6 +31,6 @@ app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
 
 const PORT = process.env.PORT || 3003;
-app.listen(PORT, () => {
+app.listen(PORT, { host: "0.0.0.0" }, () => {
   logger.info(`Server running on port ${PORT}`);
 });
