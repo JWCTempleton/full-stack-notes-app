@@ -65,25 +65,28 @@ router.get("/:id", async (req, res, next) => {
 });
 
 router.post("/", tokenExtractor, async (req, res, next) => {
-  const query = "SELECT * FROM users where user_id=$1;";
-  const value = [req.decodedToken.id];
+  // const query = "SELECT * FROM users where user_id=$1;";
+  // const value = [req.decodedToken.id];
 
   const { content, important, public } = req.body;
+
+  console.log("TOKEN", req.decodedToken);
 
   if (content === undefined) {
     return res.status(400).json({ error: "content missing" });
   }
   try {
-    const data = await pool.query(query, value);
+    //   const data = await pool.query(query, value);
 
-    if (data.rowCount == 0) {
-      return res.status(404).send("User does not exist");
-    }
-    const user = data.rows[0];
+    //   if (data.rowCount == 0) {
+    //     return res.status(404).send("User does not exist");
+    //   }
+
+    //   const user = data.rows[0];
 
     const noteQuery =
       "INSERT INTO  notes(content, important, public, user_id) VALUES($1,$2,$3,$4) RETURNING *;";
-    const noteValues = [content, important, public, user.user_id];
+    const noteValues = [content, important, public, req.decodedToken.id];
 
     const noteData = await pool.query(noteQuery, noteValues);
 
