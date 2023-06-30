@@ -3,6 +3,7 @@ import { Box, Button } from "@mui/material";
 import Note from "./components/Note";
 import { useEffect, useState } from "react";
 import NoteForm from "./components/NoteForm";
+import LoginForm from "./components/LoginForm";
 import { noteService } from "./services/notes";
 
 function App() {
@@ -62,6 +63,7 @@ function App() {
   return (
     <div className="App">
       <h1>Note App</h1>
+      <LoginForm />
       <NoteForm
         addNote={addNote}
         newNote={newNote}
