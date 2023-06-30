@@ -10,13 +10,19 @@ function App() {
   const [allNotes, setAllNotes] = useState([]);
   const [newNote, setNewNote] = useState("");
   const [showAll, setShowAll] = useState(true);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = (event) => {
+    event.preventDefault();
+    console.log(`Logging in with:`, username, password);
+  };
 
   useEffect(() => {
     noteService.getAll().then((initialNotes) => setAllNotes(initialNotes.data));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log("ALL NOTES", allNotes.data);
   const addNote = (event) => {
     event.preventDefault();
     const noteObject = {
@@ -63,7 +69,13 @@ function App() {
   return (
     <div className="App">
       <h1>Note App</h1>
-      <LoginForm />
+      <LoginForm
+        username={username}
+        setUsername={setUsername}
+        password={password}
+        setPassword={setPassword}
+        handleLogin={handleLogin}
+      />
       <NoteForm
         addNote={addNote}
         newNote={newNote}
@@ -91,7 +103,7 @@ function App() {
         {notesToDisplay.map((note) => {
           return (
             <Note
-              key={note.id}
+              key={note.note_id}
               note={note}
               toggleImportance={() => toggleImportance(note.id)}
               handleDelete={() => handleDelete(note.id)}

@@ -3,17 +3,18 @@ import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
-const LoginForm = () => {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log("submitted");
-  };
+const LoginForm = ({
+  username,
+  password,
+  handleLogin,
+  setUsername,
+  setPassword,
+}) => {
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -35,7 +36,7 @@ const LoginForm = () => {
         </Box>
         <Box
           component="form"
-          onSubmit={handleSubmit}
+          onSubmit={handleLogin}
           noValidate
           sx={{
             mt: 1,
@@ -46,11 +47,12 @@ const LoginForm = () => {
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
+            id="username"
+            label="Username"
+            name="username"
+            autoComplete="username"
             autoFocus
+            onChange={({ target }) => setUsername(target.value)}
           />
           <TextField
             margin="normal"
@@ -61,6 +63,7 @@ const LoginForm = () => {
             type="password"
             id="password"
             autoComplete="current-password"
+            onChange={({ target }) => setPassword(target.value)}
           />
           {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
