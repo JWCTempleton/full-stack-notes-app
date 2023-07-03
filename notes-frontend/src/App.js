@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import NoteForm from "./components/NoteForm";
 import LoginForm from "./components/LoginForm";
 import { noteService } from "./services/notes";
+import { loginService } from "./services/login";
 
 function App() {
   const [allNotes, setAllNotes] = useState([]);
@@ -12,10 +13,23 @@ function App() {
   const [showAll, setShowAll] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [user, setUser] = useState(null);
 
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
-    console.log(`Logging in with:`, username, password);
+
+    try {
+      const user = await loginService.login({
+        username,
+        password,
+      });
+      setUser(user);
+      setUsername("");
+      setPassword("");
+      console.log("user", user);
+    } catch (exception) {
+      alert("Wrong credentials");
+    }
   };
 
   useEffect(() => {
@@ -69,18 +83,22 @@ function App() {
   return (
     <div className="App">
       <h1>Note App</h1>
-      <LoginForm
-        username={username}
-        setUsername={setUsername}
-        password={password}
-        setPassword={setPassword}
-        handleLogin={handleLogin}
-      />
-      <NoteForm
-        addNote={addNote}
-        newNote={newNote}
-        handleNoteChange={handleNoteChange}
-      />
+      {user === null && (
+        <LoginForm
+          username={username}
+          setUsername={setUsername}
+          password={password}
+          setPassword={setPassword}
+          handleLogin={handleLogin}
+        />
+      )}
+      {user !== null && (
+        <NoteForm
+          addNote={addNote}
+          newNote={newNote}
+          handleNoteChange={handleNoteChange}
+        />
+      )}
       <Box
         sx={{
           p: 3,
