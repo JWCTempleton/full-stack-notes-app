@@ -1,5 +1,5 @@
 import "./App.css";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import Note from "./components/Note";
 import { useEffect, useState } from "react";
 import NoteForm from "./components/NoteForm";
@@ -83,7 +83,7 @@ function App() {
   return (
     <div className="App">
       <h1>Note App</h1>
-      {user === null && (
+      {!user && (
         <LoginForm
           username={username}
           setUsername={setUsername}
@@ -92,12 +92,15 @@ function App() {
           handleLogin={handleLogin}
         />
       )}
-      {user !== null && (
-        <NoteForm
-          addNote={addNote}
-          newNote={newNote}
-          handleNoteChange={handleNoteChange}
-        />
+      {user && (
+        <div>
+          <Typography>{user.username} logged in</Typography>
+          <NoteForm
+            addNote={addNote}
+            newNote={newNote}
+            handleNoteChange={handleNoteChange}
+          />
+        </div>
       )}
       <Box
         sx={{
