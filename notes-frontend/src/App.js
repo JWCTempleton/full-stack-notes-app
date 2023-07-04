@@ -9,7 +9,11 @@ import { loginService } from "./services/login";
 
 function App() {
   const [allNotes, setAllNotes] = useState([]);
-  const [newNote, setNewNote] = useState("");
+  const [newNote, setNewNote] = useState({
+    content: "",
+    publicNote: false,
+    important: false,
+  });
   const [showAll, setShowAll] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -23,6 +27,7 @@ function App() {
         username,
         password,
       });
+      noteService.setToken(user.token);
       setUser(user);
       setUsername("");
       setPassword("");
@@ -40,18 +45,29 @@ function App() {
   const addNote = (event) => {
     event.preventDefault();
     const noteObject = {
-      content: newNote,
-      important: Math.random() < 0.5,
+      content: newNote.content,
+      important: newNote.important,
+      public: newNote.publicNote,
     };
 
     noteService.create(noteObject).then((returnedNote) => {
-      setAllNotes(allNotes.concat(returnedNote));
-      setNewNote("");
+      setAllNotes(
+        allNotes.concat({ ...returnedNote.data[0], username: user.username })
+      );
+      setNewNote({
+        content: "",
+        publicNote: false,
+        important: false,
+      });
     });
   };
 
   const handleNoteChange = (event) => {
-    setNewNote(event.target.value);
+    const { name, value, type, checked } = event.target;
+    setNewNote((prevNote) => {
+      return { ...prevNote, [name]: type === "checkbox" ? checked : value };
+    });
+    console.log("note", newNote);
   };
 
   const toggleImportance = (id) => {
@@ -97,8 +113,10 @@ function App() {
           <Typography>{user.username} logged in</Typography>
           <NoteForm
             addNote={addNote}
-            newNote={newNote}
+            newNote={newNote.content}
+            publicNote={newNote.publicNote}
             handleNoteChange={handleNoteChange}
+            important={newNote.important}
           />
         </div>
       )}
