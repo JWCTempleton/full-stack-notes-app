@@ -19,6 +19,20 @@ function App() {
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
 
+  useEffect(() => {
+    noteService.getAll().then((initialNotes) => setAllNotes(initialNotes.data));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem("loggedNoteAppUser");
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON);
+      setUser(user);
+      noteService.setToken(user.token);
+    }
+  }, []);
+
   const handleLogin = async (event) => {
     event.preventDefault();
 
@@ -27,6 +41,9 @@ function App() {
         username,
         password,
       });
+
+      window.localStorage.setItem("loggedNoteAppUser", JSON.stringify(user));
+
       noteService.setToken(user.token);
       setUser(user);
       setUsername("");
@@ -36,11 +53,6 @@ function App() {
       alert("Wrong credentials");
     }
   };
-
-  useEffect(() => {
-    noteService.getAll().then((initialNotes) => setAllNotes(initialNotes.data));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const addNote = (event) => {
     event.preventDefault();
