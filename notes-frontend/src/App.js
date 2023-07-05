@@ -104,6 +104,11 @@ function App() {
     }
   };
 
+  const handleLogout = () => {
+    window.localStorage.removeItem("loggedNoteAppUser");
+    setUser(null);
+  };
+
   const notesToDisplay = showAll
     ? allNotes
     : allNotes.filter((note) => note.important);
@@ -121,8 +126,27 @@ function App() {
         />
       )}
       {user && (
-        <div>
-          <Typography>{user.username} logged in</Typography>
+        <div sx={{ display: "flex" }}>
+          <Box
+            sx={{
+              display: "flex",
+              margin: "0 auto",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "8px",
+            }}
+          >
+            <Typography>{user.username} logged in</Typography>
+            <Button
+              onClick={handleLogout}
+              type="submit"
+              variant="text"
+              size="small"
+            >
+              Logout
+            </Button>
+          </Box>
+
           <NoteForm
             addNote={addNote}
             newNote={newNote.content}
