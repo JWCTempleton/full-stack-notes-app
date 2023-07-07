@@ -4,6 +4,7 @@ import Note from "./components/Note";
 import { useEffect, useState } from "react";
 import NoteForm from "./components/NoteForm";
 import LoginForm from "./components/LoginForm";
+import Toggleable from "./components/Toggleable";
 import { noteService } from "./services/notes";
 import { loginService } from "./services/login";
 
@@ -146,14 +147,15 @@ function App() {
               Logout
             </Button>
           </Box>
-
-          <NoteForm
-            addNote={addNote}
-            newNote={newNote.content}
-            publicNote={newNote.publicNote}
-            handleNoteChange={handleNoteChange}
-            important={newNote.important}
-          />
+          <Toggleable buttonLabel="New Note">
+            <NoteForm
+              addNote={addNote}
+              newNote={newNote.content}
+              publicNote={newNote.publicNote}
+              handleNoteChange={handleNoteChange}
+              important={newNote.important}
+            />
+          </Toggleable>
         </div>
       )}
       <Box
