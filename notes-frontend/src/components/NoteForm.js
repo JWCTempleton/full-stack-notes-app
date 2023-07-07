@@ -5,6 +5,8 @@ import {
   FormControlLabel,
   Box,
 } from "@mui/material";
+import { useState } from "react";
+import { noteService } from "../services/notes";
 
 const styles = {
   display: "flex",
@@ -15,13 +17,41 @@ const styles = {
   gap: "8px",
 };
 
-const NoteForm = ({
-  addNote,
-  newNote,
-  handleNoteChange,
-  publicNote,
-  important,
-}) => {
+const NoteForm = ({ user, allNotes, setAllNotes }) => {
+  const [newNote, setNewNote] = useState({
+    content: "",
+    publicNote: false,
+    important: false,
+  });
+
+  const addNote = (event) => {
+    event.preventDefault();
+    const noteObject = {
+      content: newNote.content,
+      important: newNote.important,
+      public: newNote.publicNote,
+    };
+
+    noteService.create(noteObject).then((returnedNote) => {
+      setAllNotes(
+        allNotes.concat({ ...returnedNote.data[0], username: user.username })
+      );
+      setNewNote({
+        content: "",
+        publicNote: false,
+        important: false,
+      });
+    });
+  };
+
+  const handleNoteChange = (event) => {
+    const { name, value, type, checked } = event.target;
+    setNewNote((prevNote) => {
+      return { ...prevNote, [name]: type === "checkbox" ? checked : value };
+    });
+    console.log("note", newNote);
+  };
+
   return (
     <form onSubmit={addNote} style={styles}>
       <TextField
@@ -41,14 +71,14 @@ const NoteForm = ({
           label="Make note public"
           name="publicNote"
           onChange={handleNoteChange}
-          checked={publicNote}
+          checked={newNote.publicNote}
         />
         <FormControlLabel
           control={<Checkbox />}
           label="Make note important"
           name="important"
           onChange={handleNoteChange}
-          checked={important}
+          checked={newNote.important}
         />
       </Box>
       <Button type="submit" variant="contained" size="small">

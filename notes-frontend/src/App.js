@@ -10,11 +10,7 @@ import { loginService } from "./services/login";
 
 function App() {
   const [allNotes, setAllNotes] = useState([]);
-  const [newNote, setNewNote] = useState({
-    content: "",
-    publicNote: false,
-    important: false,
-  });
+
   const [showAll, setShowAll] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -53,34 +49,6 @@ function App() {
     } catch (exception) {
       alert("Wrong credentials");
     }
-  };
-
-  const addNote = (event) => {
-    event.preventDefault();
-    const noteObject = {
-      content: newNote.content,
-      important: newNote.important,
-      public: newNote.publicNote,
-    };
-
-    noteService.create(noteObject).then((returnedNote) => {
-      setAllNotes(
-        allNotes.concat({ ...returnedNote.data[0], username: user.username })
-      );
-      setNewNote({
-        content: "",
-        publicNote: false,
-        important: false,
-      });
-    });
-  };
-
-  const handleNoteChange = (event) => {
-    const { name, value, type, checked } = event.target;
-    setNewNote((prevNote) => {
-      return { ...prevNote, [name]: type === "checkbox" ? checked : value };
-    });
-    console.log("note", newNote);
   };
 
   const toggleImportance = (id) => {
@@ -149,11 +117,14 @@ function App() {
           </Box>
           <Toggleable buttonLabel="New Note">
             <NoteForm
-              addNote={addNote}
-              newNote={newNote.content}
-              publicNote={newNote.publicNote}
-              handleNoteChange={handleNoteChange}
-              important={newNote.important}
+              // addNote={addNote}
+              // newNote={newNote.content}
+              // publicNote={newNote.publicNote}
+              // handleNoteChange={handleNoteChange}
+              // important={newNote.important}
+              allNotes={allNotes}
+              setAllNotes={setAllNotes}
+              user={user}
             />
           </Toggleable>
         </div>
