@@ -6,14 +6,10 @@ import NoteForm from "./components/NoteForm";
 import LoginForm from "./components/LoginForm";
 import Toggleable from "./components/Toggleable";
 import { noteService } from "./services/notes";
-import { loginService } from "./services/login";
 
 function App() {
   const [allNotes, setAllNotes] = useState([]);
-
   const [showAll, setShowAll] = useState(true);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -29,27 +25,6 @@ function App() {
       noteService.setToken(user.token);
     }
   }, []);
-
-  const handleLogin = async (event) => {
-    event.preventDefault();
-
-    try {
-      const user = await loginService.login({
-        username,
-        password,
-      });
-
-      window.localStorage.setItem("loggedNoteAppUser", JSON.stringify(user));
-
-      noteService.setToken(user.token);
-      setUser(user);
-      setUsername("");
-      setPassword("");
-      console.log("user", user);
-    } catch (exception) {
-      alert("Wrong credentials");
-    }
-  };
 
   const toggleImportance = (id) => {
     const note = allNotes.find((note) => note.id === id);
@@ -85,15 +60,7 @@ function App() {
   return (
     <div className="App">
       <h1>Note App</h1>
-      {!user && (
-        <LoginForm
-          username={username}
-          setUsername={setUsername}
-          password={password}
-          setPassword={setPassword}
-          handleLogin={handleLogin}
-        />
-      )}
+      {!user && <LoginForm setUser={setUser} />}
       {user && (
         <div sx={{ display: "flex" }}>
           <Box

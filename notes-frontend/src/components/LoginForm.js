@@ -7,14 +7,34 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { loginService } from "../services/login";
+import { noteService } from "../services/notes";
+import { useState } from "react";
 
-const LoginForm = ({
-  username,
-  password,
-  handleLogin,
-  setUsername,
-  setPassword,
-}) => {
+const LoginForm = ({ setUser }) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = async (event) => {
+    event.preventDefault();
+
+    try {
+      const user = await loginService.login({
+        username,
+        password,
+      });
+
+      window.localStorage.setItem("loggedNoteAppUser", JSON.stringify(user));
+
+      noteService.setToken(user.token);
+      setUser(user);
+      setUsername("");
+      setPassword("");
+      console.log("user", user);
+    } catch (exception) {
+      alert("Wrong credentials");
+    }
+  };
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
