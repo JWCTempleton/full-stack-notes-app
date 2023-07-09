@@ -17,7 +17,7 @@ const styles = {
   gap: "8px",
 };
 
-const NoteForm = ({ user, allNotes, setAllNotes }) => {
+const NoteForm = ({ user, allNotes, setAllNotes, noteFormRef }) => {
   const [newNote, setNewNote] = useState({
     content: "",
     publicNote: false,
@@ -31,6 +31,7 @@ const NoteForm = ({ user, allNotes, setAllNotes }) => {
       important: newNote.important,
       public: newNote.publicNote,
     };
+    noteFormRef.current.toggleVisibility();
 
     noteService.create(noteObject).then((returnedNote) => {
       setAllNotes(

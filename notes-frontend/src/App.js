@@ -1,7 +1,7 @@
 import "./App.css";
 import { Box, Button, Typography } from "@mui/material";
 import Note from "./components/Note";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import NoteForm from "./components/NoteForm";
 import LoginForm from "./components/LoginForm";
 import Toggleable from "./components/Toggleable";
@@ -11,6 +11,8 @@ function App() {
   const [allNotes, setAllNotes] = useState([]);
   const [showAll, setShowAll] = useState(true);
   const [user, setUser] = useState(null);
+
+  const noteFormRef = useRef();
 
   useEffect(() => {
     noteService.getAll().then((initialNotes) => setAllNotes(initialNotes.data));
@@ -43,7 +45,7 @@ function App() {
   const handleDelete = (id) => {
     if (window.confirm(`Do you really want to delete this note?`)) {
       noteService.remove(id).then((returnedNote) => {
-        setAllNotes(allNotes.filter((note) => note.id !== id));
+        setAllNotes(allNotes.filter((note) => note.note_id !== id));
       });
     }
   };
@@ -82,7 +84,7 @@ function App() {
               Logout
             </Button>
           </Box>
-          <Toggleable buttonLabel="New Note">
+          <Toggleable buttonLabel="New Note" ref={noteFormRef}>
             <NoteForm
               // addNote={addNote}
               // newNote={newNote.content}
@@ -92,6 +94,7 @@ function App() {
               allNotes={allNotes}
               setAllNotes={setAllNotes}
               user={user}
+              noteFormRef={noteFormRef}
             />
           </Toggleable>
         </div>
@@ -121,7 +124,7 @@ function App() {
               key={note.note_id}
               note={note}
               toggleImportance={() => toggleImportance(note.id)}
-              handleDelete={() => handleDelete(note.id)}
+              handleDelete={() => handleDelete(note.note_id)}
             />
           );
         })}
