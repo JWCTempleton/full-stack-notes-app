@@ -29,17 +29,23 @@ function App() {
   }, []);
 
   const toggleImportance = (id) => {
-    const note = allNotes.find((note) => note.id === id);
+    const note = allNotes.find((note) => note.note_id === id);
     const updatedNote = { ...note, important: !note.important };
 
-    noteService.update(id, updatedNote).then((returnedNote) => {
-      setAllNotes(
-        allNotes.map((note) => (note.id !== id ? note : returnedNote))
-      ).catch((error) => {
+    noteService
+      .update(id, updatedNote)
+      .then((returnedNote) => {
+        return setAllNotes(
+          allNotes.map((note) => (note.note_id !== id ? note : updatedNote))
+        );
+      })
+      .catch((error) => {
         alert(`The note '${note.content}' was already deleted from the server`);
-        setAllNotes(allNotes.filter((note) => note.id !== id));
+        setAllNotes(allNotes.filter((note) => note.note_id !== id));
+
+        // console.log("ID", id);
+        // console.log("ALL NOTES", allNotes);
       });
-    });
   };
 
   const handleDelete = (id) => {
@@ -123,8 +129,9 @@ function App() {
             <Note
               key={note.note_id}
               note={note}
-              toggleImportance={() => toggleImportance(note.id)}
+              toggleImportance={() => toggleImportance(note.note_id)}
               handleDelete={() => handleDelete(note.note_id)}
+              user={user}
             />
           );
         })}

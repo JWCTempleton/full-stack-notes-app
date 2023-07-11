@@ -13,27 +13,30 @@ const Item = styled(Paper)(({ theme }) => ({
   gap: "6px",
 }));
 
-const Note = ({ note, toggleImportance, handleDelete }) => {
+const Note = ({ note, toggleImportance, handleDelete, user }) => {
   return (
-    <Item key={note.id} elevation={6}>
+    <Item key={note.note_id} elevation={6}>
       <Typography
         variant="h6"
         sx={{ fontWeight: "bold", textAlign: "left" }}
       >{`${note.content}`}</Typography>
       <Typography>{`Created by: ${note.username}`}</Typography>
-      <Box sx={{ display: "flex", gap: "10px" }}>
-        <Button variant="outlined" size="small" onClick={toggleImportance}>
-          {note.important ? "Important" : "Unimportant"}
-        </Button>
-        <Button
-          variant="contained"
-          size="small"
-          color="error"
-          onClick={handleDelete}
-        >
-          Delete
-        </Button>
-      </Box>
+
+      {user.username === note.username && (
+        <Box sx={{ display: "flex", gap: "10px" }}>
+          <Button variant="outlined" size="small" onClick={toggleImportance}>
+            {note.important ? "Important" : "Unimportant"}
+          </Button>
+          <Button
+            variant="contained"
+            size="small"
+            color="error"
+            onClick={handleDelete}
+          >
+            Delete
+          </Button>
+        </Box>
+      )}
     </Item>
   );
 };
