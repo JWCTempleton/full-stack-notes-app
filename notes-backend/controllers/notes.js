@@ -24,7 +24,7 @@ const tokenExtractor = (req, res, next) => {
 router.get("/", async (req, res, next) => {
   try {
     const data = await pool.query(
-      "SELECT n.*, u.user_id, u.username FROM notes n JOIN users u on n.user_id=u.user_id;"
+      "SELECT n.*, u.user_id, u.username FROM notes n JOIN users u on n.user_id=u.user_id ORDER BY n.note_id;"
     );
 
     if (data.rowCount == 0) {
@@ -105,6 +105,7 @@ router.delete("/:id", tokenExtractor, async (req, res, next) => {
   const id = parseInt(req.params.id);
   const query = "SELECT * FROM notes WHERE note_id=$1";
   const value = [id];
+  console.log("TOKEN", req.decodedToken, id);
 
   try {
     const data = await pool.query(query, value);
@@ -143,7 +144,7 @@ router.delete("/:id", tokenExtractor, async (req, res, next) => {
 router.put("/:id", tokenExtractor, async (req, res, next) => {
   const userId = req.decodedToken.id;
   const id = parseInt(req.params.id);
-  const query = "SELECT * FROM notes WHERE note_id=$1";
+  const query = "SELECT * FROM notes WHERE note_id=$1;";
   const value = [id];
 
   const { important } = req.body;
@@ -155,7 +156,8 @@ router.put("/:id", tokenExtractor, async (req, res, next) => {
       return res.status(404).send("Note does not exist");
     }
     if (userId === data.rows[0].user_id) {
-      const updateQuery = "UPDATE notes set important=$1 where note_id=$2";
+      const updateQuery =
+        "UPDATE notes set important=$1 where note_id=$2 RETURNING *";
       const updateValue = [important, id];
 
       const updateNote = await pool.query(updateQuery, updateValue);
@@ -166,6 +168,7 @@ router.put("/:id", tokenExtractor, async (req, res, next) => {
       return res.status(200).json({
         status: 200,
         message: "Note successfully updated",
+        data: updateNote.rows,
       });
     } else {
       return res
