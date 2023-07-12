@@ -22,7 +22,7 @@ const Note = ({ note, toggleImportance, handleDelete, user }) => {
       >{`${note.content}`}</Typography>
       <Typography>{`Created by: ${note.username}`}</Typography>
 
-      {user.username === note.username && (
+      {user && user.username === note.username && (
         <Box sx={{ display: "flex", gap: "10px" }}>
           <Button variant="outlined" size="small" onClick={toggleImportance}>
             {note.important ? "Important" : "Unimportant"}
