@@ -6,6 +6,7 @@ import NoteForm from "./components/NoteForm";
 import LoginForm from "./components/LoginForm";
 import Toggleable from "./components/Toggleable";
 import { noteService } from "./services/notes";
+import { useQuery } from "react-query";
 
 function App() {
   const [allNotes, setAllNotes] = useState([]);
@@ -14,10 +15,10 @@ function App() {
 
   const noteFormRef = useRef();
 
-  useEffect(() => {
-    noteService.getAll().then((initialNotes) => setAllNotes(initialNotes.data));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   noteService.getAll().then((initialNotes) => setAllNotes(initialNotes.data));
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedNoteAppUser");
@@ -27,6 +28,14 @@ function App() {
       noteService.setToken(user.token);
     }
   }, []);
+
+  const result = useQuery("notes", () =>
+    noteService.getAll().then((res) => setAllNotes(res.data))
+  );
+
+  if (result.isLoading) {
+    return <div>Loading data...</div>;
+  }
 
   const toggleImportance = (id) => {
     const note = allNotes.find((note) => note.note_id === id);
