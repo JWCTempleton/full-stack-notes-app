@@ -6,8 +6,6 @@ import {
   Box,
 } from "@mui/material";
 import { useState } from "react";
-import { noteService } from "../services/notes";
-import { useMutation } from "react-query";
 
 const styles = {
   display: "flex",

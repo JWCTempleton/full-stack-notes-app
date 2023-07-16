@@ -9,7 +9,6 @@ import { noteService } from "./services/notes";
 import { useQuery, useQueryClient, useMutation } from "react-query";
 
 function App() {
-  // const [allNotes, setAllNotes] = useState([]);
   const [showAll, setShowAll] = useState(true);
   const [user, setUser] = useState(null);
 
@@ -17,21 +16,21 @@ function App() {
 
   const queryClient = useQueryClient();
 
-  const result = useQuery("notes", noteService.getAll, {
-    refetchOnWindowFocus: false,
-  });
-
   const newNoteMutation = useMutation(noteService.create, {
     onSuccess: (newNote) => {
       const notes = queryClient.getQueryData("notes");
-      queryClient.setQueryData("notes", notes.data.concat(newNote.data[0]));
+      queryClient.setQueryData(
+        "notes",
+        notes.concat([{ ...newNote[0], username: user.username }])
+      );
     },
   });
 
   const updateNoteMutation = useMutation(noteService.update, {
     onSuccess: (newNote) => {
-      queryClient.invalidateQueries("notes");
-      console.log("NEW NOTE", newNote.data[0]);
+      const notes = queryClient.getQueryData("notes");
+      queryClient.setQueryData("notes", notes.data.concat(newNote.data));
+      console.log("NEW NOTE", notes.data);
     },
   });
 
@@ -55,15 +54,22 @@ function App() {
     }
   }, []);
 
+  const result = useQuery("notes", noteService.getAll, {
+    refetchOnWindowFocus: false,
+  });
+
+  let allNotes = queryClient.getQueryData("notes");
+  console.log("TEST", allNotes);
+
   if (result.isLoading) {
     return <div>Loading data...</div>;
   }
 
-  let notesToDisplay = showAll
-    ? queryClient.getQueryData("notes").data
-    : queryClient.getQueryData("notes").data.filter((note) => note.important);
+  const handleShowImportance = () => {
+    setShowAll(!showAll);
+  };
 
-  console.log("ALL NOTES", notesToDisplay);
+  console.log("NOTES", allNotes);
 
   // const toggleImportance = (id) => {
   //   const note = notes.find((note) => note.note_id === id);
@@ -155,12 +161,12 @@ function App() {
         <Button
           variant="contained"
           color="secondary"
-          onClick={() => setShowAll(!showAll)}
+          onClick={handleShowImportance}
           sx={{ alignSelf: "center" }}
         >
           {showAll ? "Important" : "All"}
         </Button>
-        {notesToDisplay.map((note) => {
+        {allNotes.map((note) => {
           return (
             <Note
               key={note.note_id}

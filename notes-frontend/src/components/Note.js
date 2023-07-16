@@ -1,7 +1,5 @@
 import { styled } from "@mui/material/styles";
 import { Button, Typography, Paper, Box } from "@mui/material";
-import { noteService } from "../services/notes";
-import { useMutation } from "react-query";
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -35,7 +33,6 @@ const Note = ({
 
     updateNoteMutation.mutate(updatedNote);
 
-    console.log("NOTE", updatedNote);
     // console.log("ALL NOTES", allNotes);
   };
 
