@@ -7,6 +7,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { noteService } from "../services/notes";
+import { useMutation } from "react-query";
 
 const styles = {
   display: "flex",
@@ -17,14 +18,20 @@ const styles = {
   gap: "8px",
 };
 
-const NoteForm = ({ user, allNotes, setAllNotes, noteFormRef }) => {
+const NoteForm = ({ noteFormRef, queryClient, newNoteMutation }) => {
   const [newNote, setNewNote] = useState({
     content: "",
     publicNote: false,
     important: false,
   });
 
-  const addNote = (event) => {
+  // const newNoteMutation = useMutation(noteService.create, {
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries("notes");
+  //   },
+  // });
+
+  const addNote = async (event) => {
     event.preventDefault();
     const noteObject = {
       content: newNote.content,
@@ -33,15 +40,14 @@ const NoteForm = ({ user, allNotes, setAllNotes, noteFormRef }) => {
     };
     noteFormRef.current.toggleVisibility();
 
-    noteService.create(noteObject).then((returnedNote) => {
-      setAllNotes(
-        allNotes.concat({ ...returnedNote.data[0], username: user.username })
-      );
-      setNewNote({
-        content: "",
-        publicNote: false,
-        important: false,
-      });
+    newNoteMutation.mutate(noteObject);
+    // setAllNotes(
+    //   allNotes.concat({ ...returnedNote.data[0], username: user.username })
+    // );
+    setNewNote({
+      content: "",
+      publicNote: false,
+      important: false,
     });
   };
 

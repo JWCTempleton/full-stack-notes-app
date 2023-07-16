@@ -6,14 +6,40 @@ import NoteForm from "./components/NoteForm";
 import LoginForm from "./components/LoginForm";
 import Toggleable from "./components/Toggleable";
 import { noteService } from "./services/notes";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient, useMutation } from "react-query";
 
 function App() {
-  const [allNotes, setAllNotes] = useState([]);
+  // const [allNotes, setAllNotes] = useState([]);
   const [showAll, setShowAll] = useState(true);
   const [user, setUser] = useState(null);
 
   const noteFormRef = useRef();
+
+  const queryClient = useQueryClient();
+
+  const result = useQuery("notes", noteService.getAll, {
+    refetchOnWindowFocus: false,
+  });
+
+  const newNoteMutation = useMutation(noteService.create, {
+    onSuccess: (newNote) => {
+      const notes = queryClient.getQueryData("notes");
+      queryClient.setQueryData("notes", notes.data.concat(newNote.data[0]));
+    },
+  });
+
+  const updateNoteMutation = useMutation(noteService.update, {
+    onSuccess: (newNote) => {
+      queryClient.invalidateQueries("notes");
+      console.log("NEW NOTE", newNote.data[0]);
+    },
+  });
+
+  const deleteNoteMutation = useMutation(noteService.remove, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("notes");
+    },
+  });
 
   // useEffect(() => {
   //   noteService.getAll().then((initialNotes) => setAllNotes(initialNotes.data));
@@ -29,50 +55,48 @@ function App() {
     }
   }, []);
 
-  const result = useQuery("notes", () =>
-    noteService.getAll().then((res) => setAllNotes(res.data))
-  );
-
   if (result.isLoading) {
     return <div>Loading data...</div>;
   }
 
-  const toggleImportance = (id) => {
-    const note = allNotes.find((note) => note.note_id === id);
-    const updatedNote = { ...note, important: !note.important };
+  let notesToDisplay = showAll
+    ? queryClient.getQueryData("notes").data
+    : queryClient.getQueryData("notes").data.filter((note) => note.important);
 
-    noteService
-      .update(id, updatedNote)
-      .then((returnedNote) => {
-        return setAllNotes(
-          allNotes.map((note) => (note.note_id !== id ? note : updatedNote))
-        );
-      })
-      .catch((error) => {
-        alert(`The note '${note.content}' was already deleted from the server`);
-        setAllNotes(allNotes.filter((note) => note.note_id !== id));
+  console.log("ALL NOTES", notesToDisplay);
 
-        // console.log("ID", id);
-        // console.log("ALL NOTES", allNotes);
-      });
-  };
+  // const toggleImportance = (id) => {
+  //   const note = notes.find((note) => note.note_id === id);
+  //   const updatedNote = { ...note, important: !note.important };
 
-  const handleDelete = (id) => {
-    if (window.confirm(`Do you really want to delete this note?`)) {
-      noteService.remove(id).then((returnedNote) => {
-        setAllNotes(allNotes.filter((note) => note.note_id !== id));
-      });
-    }
-  };
+  //   noteService
+  //     .update(id, updatedNote)
+  //     .then((returnedNote) => {
+  //       return setAllNotes(
+  //         allNotes.map((note) => (note.note_id !== id ? note : updatedNote))
+  //       );
+  //     })
+  //     .catch((error) => {
+  //       alert(`The note '${note.content}' was already deleted from the server`);
+  //       setAllNotes(allNotes.filter((note) => note.note_id !== id));
+
+  //       // console.log("ID", id);
+  //       // console.log("ALL NOTES", allNotes);
+  //     });
+  // };
+
+  // const handleDelete = (id) => {
+  //   if (window.confirm(`Do you really want to delete this note?`)) {
+  //     noteService.remove(id).then((returnedNote) => {
+  //       setAllNotes(allNotes.filter((note) => note.note_id !== id));
+  //     });
+  //   }
+  // };
 
   const handleLogout = () => {
     window.localStorage.removeItem("loggedNoteAppUser");
     setUser(null);
   };
-
-  const notesToDisplay = showAll
-    ? allNotes
-    : allNotes.filter((note) => note.important);
 
   return (
     <div className="App">
@@ -106,10 +130,13 @@ function App() {
               // publicNote={newNote.publicNote}
               // handleNoteChange={handleNoteChange}
               // important={newNote.important}
-              allNotes={allNotes}
-              setAllNotes={setAllNotes}
+              // allNotes={allNotes}
+              // setAllNotes={setAllNotes}
               user={user}
               noteFormRef={noteFormRef}
+              queryClient={queryClient}
+              // notes={notes}
+              newNoteMutation={newNoteMutation}
             />
           </Toggleable>
         </div>
@@ -138,9 +165,13 @@ function App() {
             <Note
               key={note.note_id}
               note={note}
-              toggleImportance={() => toggleImportance(note.note_id)}
-              handleDelete={() => handleDelete(note.note_id)}
+              // toggleImportance={() => toggleImportance(note.note_id)}
+              // handleDelete={() => handleDelete(note.note_id)}
               user={user}
+              queryClient={queryClient}
+              // notes={notes}
+              updateNoteMutation={updateNoteMutation}
+              deleteNoteMutation={deleteNoteMutation}
             />
           );
         })}
