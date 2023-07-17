@@ -32,12 +32,15 @@ const update = async (newObject) => {
   return response.data.data;
 };
 
-const remove = async (id) => {
+const remove = async (newObject) => {
   const config = {
     headers: { Authorization: token },
   };
-  const request = axios.delete(`${baseUrl}/${id}`, config);
-  return request.then((response) => response.data);
+  const response = await axios.delete(
+    `${baseUrl}/${newObject.note_id}`,
+    config
+  );
+  return response.data.data;
 };
 
 export const noteService = {

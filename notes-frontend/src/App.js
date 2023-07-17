@@ -41,8 +41,13 @@ function App() {
   });
 
   const deleteNoteMutation = useMutation(noteService.remove, {
-    onSuccess: () => {
-      queryClient.invalidateQueries("notes");
+    onSuccess: (newNote) => {
+      // queryClient.invalidateQueries("notes");
+      const notes = queryClient.getQueryData("notes");
+      queryClient.setQueryData(
+        "notes",
+        notes.filter((n) => n.note_id !== newNote[0].note_id)
+      );
     },
   });
 

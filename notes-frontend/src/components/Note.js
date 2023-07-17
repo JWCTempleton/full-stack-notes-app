@@ -41,7 +41,7 @@ const Note = ({
       // noteService.remove(id).then((returnedNote) => {
       //   setAllNotes(allNotes.filter((note) => note.note_id !== id));
       // });
-      deleteNoteMutation.mutate(note.note_id);
+      deleteNoteMutation.mutate(note);
     }
   };
 
