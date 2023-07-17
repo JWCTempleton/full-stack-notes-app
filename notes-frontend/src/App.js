@@ -29,8 +29,14 @@ function App() {
   const updateNoteMutation = useMutation(noteService.update, {
     onSuccess: (newNote) => {
       const notes = queryClient.getQueryData("notes");
-      queryClient.setQueryData("notes", notes.data.concat(newNote.data));
-      console.log("NEW NOTE", notes.data);
+      queryClient.setQueryData(
+        "notes",
+        notes.map((note) =>
+          note.note_id !== newNote[0].note_id
+            ? note
+            : { ...newNote[0], username: user.username }
+        )
+      );
     },
   });
 

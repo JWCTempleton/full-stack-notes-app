@@ -29,7 +29,7 @@ const update = async (newObject) => {
     newObject,
     config
   );
-  return response.data;
+  return response.data.data;
 };
 
 const remove = async (id) => {
