@@ -16,18 +16,12 @@ const styles = {
   gap: "8px",
 };
 
-const NoteForm = ({ noteFormRef, queryClient, newNoteMutation }) => {
+const NoteForm = ({ noteFormRef, newNoteMutation }) => {
   const [newNote, setNewNote] = useState({
     content: "",
     publicNote: false,
     important: false,
   });
-
-  // const newNoteMutation = useMutation(noteService.create, {
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries("notes");
-  //   },
-  // });
 
   const addNote = async (event) => {
     event.preventDefault();
