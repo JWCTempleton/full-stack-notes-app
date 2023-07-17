@@ -1,12 +1,14 @@
 import "./App.css";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Typography, CircularProgress } from "@mui/material";
 import Note from "./components/Note";
 import { useEffect, useState, useRef } from "react";
 import NoteForm from "./components/NoteForm";
 import LoginForm from "./components/LoginForm";
 import Toggleable from "./components/Toggleable";
+import Footer from "./components/Footer";
 import { noteService } from "./services/notes";
 import { useQuery, useQueryClient, useMutation } from "react-query";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 function App() {
   const [showAll, setShowAll] = useState(true);
@@ -51,11 +53,6 @@ function App() {
     },
   });
 
-  // useEffect(() => {
-  //   noteService.getAll().then((initialNotes) => setAllNotes(initialNotes.data));
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedNoteAppUser");
     if (loggedUserJSON) {
@@ -72,7 +69,22 @@ function App() {
   let allNotes = queryClient.getQueryData("notes");
 
   if (result.isLoading) {
-    return <div>Loading data...</div>;
+    return (
+      <Box
+        sx={{
+          width: "100vw",
+          height: "60px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          paddingTop: "20px",
+        }}
+      >
+        <Typography>Loading...</Typography>
+        <CircularProgress />
+      </Box>
+    );
   }
 
   const handleShowImportance = () => {
@@ -139,17 +151,9 @@ function App() {
           </Box>
           <Toggleable buttonLabel="New Note" ref={noteFormRef}>
             <NoteForm
-              // addNote={addNote}
-              // newNote={newNote.content}
-              // publicNote={newNote.publicNote}
-              // handleNoteChange={handleNoteChange}
-              // important={newNote.important}
-              // allNotes={allNotes}
-              // setAllNotes={setAllNotes}
               user={user}
               noteFormRef={noteFormRef}
               queryClient={queryClient}
-              // notes={notes}
               newNoteMutation={newNoteMutation}
             />
           </Toggleable>
@@ -179,17 +183,15 @@ function App() {
             <Note
               key={note.note_id}
               note={note}
-              // toggleImportance={() => toggleImportance(note.note_id)}
-              // handleDelete={() => handleDelete(note.note_id)}
               user={user}
               queryClient={queryClient}
-              // notes={notes}
               updateNoteMutation={updateNoteMutation}
               deleteNoteMutation={deleteNoteMutation}
             />
           );
         })}
       </Box>
+      <Footer />
     </div>
   );
 }
