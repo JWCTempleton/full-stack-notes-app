@@ -70,7 +70,6 @@ function App() {
   });
 
   let allNotes = queryClient.getQueryData("notes");
-  console.log("TEST", allNotes);
 
   if (result.isLoading) {
     return <div>Loading data...</div>;
@@ -79,8 +78,6 @@ function App() {
   const handleShowImportance = () => {
     setShowAll(!showAll);
   };
-
-  console.log("NOTES", allNotes);
 
   // const toggleImportance = (id) => {
   //   const note = notes.find((note) => note.note_id === id);

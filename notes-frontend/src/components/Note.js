@@ -1,5 +1,11 @@
 import { styled } from "@mui/material/styles";
 import { Button, Typography, Paper, Box } from "@mui/material";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import { useState } from "react";
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -12,37 +18,30 @@ const Item = styled(Paper)(({ theme }) => ({
   gap: "6px",
 }));
 
-const Note = ({
-  note,
-  // handleDelete,
-  user,
-  updateNoteMutation,
-  deleteNoteMutation,
-}) => {
-  // const updateNoteMutation = useMutation(noteService.update, {
-  //   onSuccess: (newNote) => {
-  //     queryClient.invalidateQueries("notes");
-  //     console.log("NEW DATA", newNote);
-  //   },
-  // });
+const Note = ({ note, user, updateNoteMutation, deleteNoteMutation }) => {
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const toggleImportance = async (note) => {
     // const updateNote = notes.find((note) => note.note_id === id);
-    // console.log("UPDATE", notes);
     const updatedNote = { ...note, important: !note.important };
 
     updateNoteMutation.mutate(updatedNote);
-
-    // console.log("ALL NOTES", allNotes);
   };
 
   const handleDelete = async (note) => {
-    if (window.confirm(`Do you really want to delete this note?`)) {
-      // noteService.remove(id).then((returnedNote) => {
-      //   setAllNotes(allNotes.filter((note) => note.note_id !== id));
-      // });
-      deleteNoteMutation.mutate(note);
-    }
+    // noteService.remove(id).then((returnedNote) => {
+    //   setAllNotes(allNotes.filter((note) => note.note_id !== id));
+    // });
+    deleteNoteMutation.mutate(note);
+    setOpen(false);
   };
 
   return (
@@ -66,10 +65,31 @@ const Note = ({
             variant="contained"
             size="small"
             color="error"
-            onClick={() => handleDelete(note)}
+            onClick={handleClickOpen}
           >
             Delete
           </Button>
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              {"Are you sure you want to delete this note?"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Deleting this note will be permanent.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose}>Cancel</Button>
+              <Button onClick={() => handleDelete(note)} autoFocus>
+                Agree
+              </Button>
+            </DialogActions>
+          </Dialog>
         </Box>
       )}
     </Item>
