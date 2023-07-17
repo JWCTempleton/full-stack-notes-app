@@ -10,10 +10,13 @@ import Container from "@mui/material/Container";
 import { loginService } from "../services/login";
 import { noteService } from "../services/notes";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = ({ setUser }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -31,6 +34,7 @@ const LoginForm = ({ setUser }) => {
       setUsername("");
       setPassword("");
       console.log("user", user);
+      navigate("/");
     } catch (exception) {
       alert("Wrong credentials");
     }

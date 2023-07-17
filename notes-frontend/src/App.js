@@ -5,6 +5,8 @@ import { useEffect, useState, useRef } from "react";
 import NoteForm from "./components/NoteForm";
 import LoginForm from "./components/LoginForm";
 import Toggleable from "./components/Toggleable";
+import Login from "./components/Login";
+import Home from "./components/Home";
 import Footer from "./components/Footer";
 import { noteService } from "./services/notes";
 import { useQuery, useQueryClient, useMutation } from "react-query";
@@ -14,7 +16,7 @@ function App() {
   const [showAll, setShowAll] = useState(true);
   const [user, setUser] = useState(null);
 
-  const noteFormRef = useRef();
+  // const noteFormRef = useRef();
 
   const queryClient = useQueryClient();
 
@@ -125,74 +127,52 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <h1>Note App</h1>
-      {!user && <LoginForm setUser={setUser} />}
-      {user && (
-        <div sx={{ display: "flex" }}>
-          <Box
-            sx={{
-              display: "flex",
-              margin: "0 auto",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: "8px",
-            }}
-          >
-            <Typography>{user.username} logged in</Typography>
+    <Router>
+      <div
+        style={{
+          width: "100vw",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <Link style={{ padding: "8px" }} to="/">
+          home
+        </Link>
+        <Link style={{ padding: "8px" }} to="/notes">
+          notes
+        </Link>
+        <Link style={{ padding: "8px" }} to="/user">
+          user
+        </Link>
+        <div style={{ marginLeft: "auto" }}>
+          {user ? (
+            <em>{user.username} logged in</em>
+          ) : (
+            <Link style={{ padding: "8px" }} to="/login">
+              login
+            </Link>
+          )}
+          {user && (
             <Button
               onClick={handleLogout}
               type="submit"
               variant="text"
               size="small"
+              style={{ paddingLeft: "12px" }}
             >
               Logout
             </Button>
-          </Box>
-          <Toggleable buttonLabel="New Note" ref={noteFormRef}>
-            <NoteForm
-              user={user}
-              noteFormRef={noteFormRef}
-              queryClient={queryClient}
-              newNoteMutation={newNoteMutation}
-            />
-          </Toggleable>
+          )}
         </div>
-      )}
-      <Box
-        sx={{
-          p: 3,
-          bgcolor: "background.default",
-          display: "flex",
-          flexDirection: "column",
-          width: "65vw",
-          gap: 3,
-          margin: "0 auto",
-        }}
-      >
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={handleShowImportance}
-          sx={{ alignSelf: "center" }}
-        >
-          {showAll ? "Important" : "All"}
-        </Button>
-        {allNotes.map((note) => {
-          return (
-            <Note
-              key={note.note_id}
-              note={note}
-              user={user}
-              queryClient={queryClient}
-              updateNoteMutation={updateNoteMutation}
-              deleteNoteMutation={deleteNoteMutation}
-            />
-          );
-        })}
-      </Box>
+      </div>
+      <Routes>
+        {/* <Route path="/notes" element={<Notes user={user} />} /> */}
+        {/* <Route path="/user" element={<User />}/> */}
+        <Route path="/login" element={<Login setUser={setUser} />} />
+        <Route path="/" element={<Home />} />
+      </Routes>
       <Footer />
-    </div>
+    </Router>
   );
 }
 
