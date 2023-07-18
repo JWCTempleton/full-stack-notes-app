@@ -1,13 +1,63 @@
-import { Box, Button, Typography, CircularProgress } from "@mui/material";
-import { useEffect, useState, useRef } from "react";
+import { useMutation } from "react-query";
+import { Box, Button } from "@mui/material";
+import { useState, useRef } from "react";
+import { noteService } from "../services/notes";
+import Toggleable from "./Toggleable";
+import NoteForm from ".//NoteForm";
+import Note from "./Note";
 
-const Notes = ({ user }) => {
+const Notes = ({ user, queryClient }) => {
+  const [showAll, setShowAll] = useState(true);
+
   const noteFormRef = useRef();
+
+  let allNotes = queryClient.getQueryData("notes");
+
+  let filteredNotes = showAll
+    ? allNotes
+    : allNotes.filter((n) => n.important === true);
+
+  const newNoteMutation = useMutation(noteService.create, {
+    onSuccess: (newNote) => {
+      const notes = queryClient.getQueryData("notes");
+      queryClient.setQueryData(
+        "notes",
+        notes.concat([{ ...newNote[0], username: user.username }])
+      );
+    },
+  });
+
+  const updateNoteMutation = useMutation(noteService.update, {
+    onSuccess: (newNote) => {
+      const notes = queryClient.getQueryData("notes");
+      queryClient.setQueryData(
+        "notes",
+        notes.map((note) =>
+          note.note_id !== newNote[0].note_id
+            ? note
+            : { ...newNote[0], username: user.username }
+        )
+      );
+    },
+  });
+
+  const deleteNoteMutation = useMutation(noteService.remove, {
+    onSuccess: (newNote) => {
+      const notes = queryClient.getQueryData("notes");
+      queryClient.setQueryData(
+        "notes",
+        notes.filter((n) => n.note_id !== newNote[0].note_id)
+      );
+    },
+  });
+
+  const handleShowImportance = () => {
+    setShowAll(!showAll);
+  };
 
   return (
     <div>
       <h1>Note App</h1>
-      {/* {!user && <LoginForm setUser={setUser} />} */}
       {user && (
         <div sx={{ display: "flex" }}>
           <Box
@@ -20,23 +70,23 @@ const Notes = ({ user }) => {
             }}
           >
             {/* <Typography>{user.username} logged in</Typography> */}
-            <Button
+            {/* <Button
               onClick={handleLogout}
               type="submit"
               variant="text"
               size="small"
             >
               Logout
-            </Button>
+            </Button> */}
+            <Toggleable buttonLabel="New Note" ref={noteFormRef}>
+              <NoteForm
+                user={user}
+                noteFormRef={noteFormRef}
+                queryClient={queryClient}
+                newNoteMutation={newNoteMutation}
+              />
+            </Toggleable>
           </Box>
-          <Toggleable buttonLabel="New Note" ref={noteFormRef}>
-            <NoteForm
-              user={user}
-              noteFormRef={noteFormRef}
-              queryClient={queryClient}
-              newNoteMutation={newNoteMutation}
-            />
-          </Toggleable>
         </div>
       )}
       <Box
@@ -58,7 +108,7 @@ const Notes = ({ user }) => {
         >
           {showAll ? "Important" : "All"}
         </Button>
-        {allNotes.map((note) => {
+        {filteredNotes.map((note) => {
           return (
             <Note
               key={note.note_id}
@@ -74,3 +124,5 @@ const Notes = ({ user }) => {
     </div>
   );
 };
+
+export default Notes;

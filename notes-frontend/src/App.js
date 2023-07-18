@@ -1,59 +1,60 @@
 import "./App.css";
 import { Box, Button, Typography, CircularProgress } from "@mui/material";
-import Note from "./components/Note";
+// import Note from "./components/Note";
 import { useEffect, useState, useRef } from "react";
-import NoteForm from "./components/NoteForm";
-import LoginForm from "./components/LoginForm";
-import Toggleable from "./components/Toggleable";
+// import NoteForm from "./components/NoteForm";
+// import LoginForm from "./components/LoginForm";
+// import Toggleable from "./components/Toggleable";
 import Login from "./components/Login";
 import Home from "./components/Home";
 import Footer from "./components/Footer";
+import Notes from "./components/Notes";
 import { noteService } from "./services/notes";
-import { useQuery, useQueryClient, useMutation } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 function App() {
-  const [showAll, setShowAll] = useState(true);
+  // const [showAll, setShowAll] = useState(true);
   const [user, setUser] = useState(null);
 
   // const noteFormRef = useRef();
 
   const queryClient = useQueryClient();
 
-  const newNoteMutation = useMutation(noteService.create, {
-    onSuccess: (newNote) => {
-      const notes = queryClient.getQueryData("notes");
-      queryClient.setQueryData(
-        "notes",
-        notes.concat([{ ...newNote[0], username: user.username }])
-      );
-    },
-  });
+  // const newNoteMutation = useMutation(noteService.create, {
+  //   onSuccess: (newNote) => {
+  //     const notes = queryClient.getQueryData("notes");
+  //     queryClient.setQueryData(
+  //       "notes",
+  //       notes.concat([{ ...newNote[0], username: user.username }])
+  //     );
+  //   },
+  // });
 
-  const updateNoteMutation = useMutation(noteService.update, {
-    onSuccess: (newNote) => {
-      const notes = queryClient.getQueryData("notes");
-      queryClient.setQueryData(
-        "notes",
-        notes.map((note) =>
-          note.note_id !== newNote[0].note_id
-            ? note
-            : { ...newNote[0], username: user.username }
-        )
-      );
-    },
-  });
+  // const updateNoteMutation = useMutation(noteService.update, {
+  //   onSuccess: (newNote) => {
+  //     const notes = queryClient.getQueryData("notes");
+  //     queryClient.setQueryData(
+  //       "notes",
+  //       notes.map((note) =>
+  //         note.note_id !== newNote[0].note_id
+  //           ? note
+  //           : { ...newNote[0], username: user.username }
+  //       )
+  //     );
+  //   },
+  // });
 
-  const deleteNoteMutation = useMutation(noteService.remove, {
-    onSuccess: (newNote) => {
-      // queryClient.invalidateQueries("notes");
-      const notes = queryClient.getQueryData("notes");
-      queryClient.setQueryData(
-        "notes",
-        notes.filter((n) => n.note_id !== newNote[0].note_id)
-      );
-    },
-  });
+  // const deleteNoteMutation = useMutation(noteService.remove, {
+  //   onSuccess: (newNote) => {
+  //     // queryClient.invalidateQueries("notes");
+  //     const notes = queryClient.getQueryData("notes");
+  //     queryClient.setQueryData(
+  //       "notes",
+  //       notes.filter((n) => n.note_id !== newNote[0].note_id)
+  //     );
+  //   },
+  // });
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedNoteAppUser");
@@ -68,7 +69,7 @@ function App() {
     refetchOnWindowFocus: false,
   });
 
-  let allNotes = queryClient.getQueryData("notes");
+  // let allNotes = queryClient.getQueryData("notes");
 
   if (result.isLoading) {
     return (
@@ -89,9 +90,9 @@ function App() {
     );
   }
 
-  const handleShowImportance = () => {
-    setShowAll(!showAll);
-  };
+  // const handleShowImportance = () => {
+  //   setShowAll(!showAll);
+  // };
 
   // const toggleImportance = (id) => {
   //   const note = notes.find((note) => note.note_id === id);
@@ -166,7 +167,10 @@ function App() {
         </div>
       </div>
       <Routes>
-        {/* <Route path="/notes" element={<Notes user={user} />} /> */}
+        <Route
+          path="/notes"
+          element={<Notes user={user} queryClient={queryClient} />}
+        />
         {/* <Route path="/user" element={<User />}/> */}
         <Route path="/login" element={<Login setUser={setUser} />} />
         <Route path="/" element={<Home />} />
