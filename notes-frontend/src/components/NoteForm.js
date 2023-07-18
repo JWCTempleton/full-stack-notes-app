@@ -58,7 +58,6 @@ const NoteForm = ({ noteFormRef, newNoteMutation }) => {
         label="New Note"
         name="content"
         multiline
-        rows={4}
         variant="outlined"
         value={newNote.content}
         onChange={handleNoteChange}

@@ -1,7 +1,7 @@
 import "./App.css";
 import { Box, Button, Typography, CircularProgress } from "@mui/material";
 // import Note from "./components/Note";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 // import NoteForm from "./components/NoteForm";
 // import LoginForm from "./components/LoginForm";
 // import Toggleable from "./components/Toggleable";
@@ -9,9 +9,16 @@ import Login from "./components/Login";
 import Home from "./components/Home";
 import Footer from "./components/Footer";
 import Notes from "./components/Notes";
+import User from "./components/User";
 import { noteService } from "./services/notes";
 import { useQuery, useQueryClient } from "react-query";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  Navigate,
+} from "react-router-dom";
 
 function App() {
   // const [showAll, setShowAll] = useState(true);
@@ -142,9 +149,11 @@ function App() {
         <Link style={{ padding: "8px" }} to="/notes">
           notes
         </Link>
-        <Link style={{ padding: "8px" }} to="/user">
-          user
-        </Link>
+        {user && (
+          <Link style={{ padding: "8px" }} to="/user">
+            user
+          </Link>
+        )}
         <div style={{ marginLeft: "auto" }}>
           {user ? (
             <em>{user.username} logged in</em>
@@ -171,7 +180,10 @@ function App() {
           path="/notes"
           element={<Notes user={user} queryClient={queryClient} />}
         />
-        {/* <Route path="/user" element={<User />}/> */}
+        <Route
+          path="/user"
+          element={user ? <User /> : <Navigate replace to="/login" />}
+        />
         <Route path="/login" element={<Login setUser={setUser} />} />
         <Route path="/" element={<Home />} />
       </Routes>
