@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import { QueryClient, QueryClientProvider } from "react-query";
 import App from "./App";
+import { BrowserRouter as Router } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals";
 
 const queryClient = new QueryClient();
@@ -12,7 +13,9 @@ root.render(
   //Passes react-query library function to entire app
   <QueryClientProvider client={queryClient}>
     <React.StrictMode>
-      <App />
+      <Router>
+        <App />
+      </Router>
     </React.StrictMode>
   </QueryClientProvider>
 );

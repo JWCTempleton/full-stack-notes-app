@@ -1,5 +1,11 @@
 import "./App.css";
-import { Box, Button, Typography, CircularProgress } from "@mui/material";
+import {
+  Box,
+  Button,
+  Typography,
+  CircularProgress,
+  Container,
+} from "@mui/material";
 // import Note from "./components/Note";
 import { useEffect, useState } from "react";
 // import NoteForm from "./components/NoteForm";
@@ -12,13 +18,7 @@ import Notes from "./components/Notes";
 import User from "./components/User";
 import { noteService } from "./services/notes";
 import { useQuery, useQueryClient } from "react-query";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Link,
-  Navigate,
-} from "react-router-dom";
+import { Routes, Route, Link, Navigate } from "react-router-dom";
 
 function App() {
   // const [showAll, setShowAll] = useState(true);
@@ -135,30 +135,36 @@ function App() {
   };
 
   return (
-    <Router>
+    <Container>
       <div
         style={{
-          width: "100vw",
+          width: "95vw",
           display: "flex",
           alignItems: "center",
+          justifyContent: "space-between",
         }}
       >
-        <Link style={{ padding: "8px" }} to="/">
-          home
-        </Link>
-        <Link style={{ padding: "8px" }} to="/notes">
-          notes
-        </Link>
-        {user && (
-          <Link style={{ padding: "8px" }} to="/user">
-            user
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Link style={{ padding: "8px", textDecoration: "none" }} to="/">
+            home
           </Link>
-        )}
-        <div style={{ marginLeft: "auto" }}>
+          <Link style={{ padding: "8px", textDecoration: "none" }} to="/notes">
+            all notes
+          </Link>
+          {user && (
+            <Link style={{ padding: "8px", textDecoration: "none" }} to="/user">
+              user
+            </Link>
+          )}
+        </div>
+        <div style={{ display: "flex", alignItems: "center" }}>
           {user ? (
-            <em>{user.username} logged in</em>
+            <Typography>{user.username} logged in</Typography>
           ) : (
-            <Link style={{ padding: "8px" }} to="/login">
+            <Link
+              style={{ padding: "8px", textDecoration: "none" }}
+              to="/login"
+            >
               login
             </Link>
           )}
@@ -188,7 +194,7 @@ function App() {
         <Route path="/" element={<Home />} />
       </Routes>
       <Footer />
-    </Router>
+    </Container>
   );
 }
 
