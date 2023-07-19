@@ -5,7 +5,11 @@ const Toggleable = forwardRef((props, refs) => {
   const [visible, setVisible] = useState(false);
 
   const hideWhenVisible = { display: visible ? "none" : "" };
-  const showWhenVisible = { display: visible ? "" : "none" };
+  const showWhenVisible = {
+    display: visible ? "flex" : "none",
+    flexDirection: "column",
+    alignItems: "center",
+  };
 
   const toggleVisibility = () => {
     setVisible(!visible);
@@ -29,7 +33,12 @@ const Toggleable = forwardRef((props, refs) => {
       </div>
       <div style={showWhenVisible}>
         {props.children}
-        <Button variant="contained" onClick={toggleVisibility}>
+        <Button
+          variant="contained"
+          color="error"
+          size="small"
+          onClick={toggleVisibility}
+        >
           cancel
         </Button>
       </div>
