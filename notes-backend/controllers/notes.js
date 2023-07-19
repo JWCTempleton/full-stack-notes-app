@@ -116,7 +116,7 @@ router.delete("/:id", tokenExtractor, async (req, res, next) => {
 
     if (userId === data.rows[0].user_id) {
       const id = parseInt(req.params.id);
-      const deleteQuery = "DELETE FROM notes where note_id=$1";
+      const deleteQuery = "DELETE FROM notes where note_id=$1 returning *";
       const deleteValue = [id];
       try {
         const deleteData = await pool.query(deleteQuery, deleteValue);
@@ -127,6 +127,7 @@ router.delete("/:id", tokenExtractor, async (req, res, next) => {
         return res.status(200).json({
           status: 200,
           message: "Note successfully deleted",
+          data: deleteData.rows,
         });
       } catch (error) {
         return next(error);
