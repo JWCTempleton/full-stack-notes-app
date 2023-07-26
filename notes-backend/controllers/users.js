@@ -1,8 +1,26 @@
 const { pool } = require("../config");
 const router = require("express").Router();
+const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const bcrypt = require("bcrypt");
 dotenv.config();
+
+const tokenExtractor = (req, res, next) => {
+  const authorization = req.get("authorization");
+  if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
+    try {
+      req.decodedToken = jwt.verify(
+        authorization.substring(7),
+        process.env.SECRET
+      );
+    } catch {
+      return res.status(401).json({ error: "token invalid" });
+    }
+  } else {
+    return res.status(401).json({ error: "token missing" });
+  }
+  next();
+};
 
 router.get("/", async (req, res, next) => {
   try {
@@ -17,6 +35,27 @@ router.get("/", async (req, res, next) => {
     return res.status(200).json({
       status: 200,
       message: "All users",
+      data: data.rows,
+    });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+router.get("/:id", tokenExtractor, async (req, res, next) => {
+  try {
+    const userNoteQuery =
+      "SELECT n.*, u.user_id, u.username FROM notes n JOIN users u on n.user_id=u.user_id WHERE u.user_id=$1 ORDER BY n.note_id;";
+    const value = [req.decodedToken.id];
+
+    const data = await pool.query(userNoteQuery, value);
+    if (data.rowCount == 0) {
+      return res.status(404).send("No notes exist");
+    }
+
+    return res.status(200).json({
+      status: 200,
+      message: "All user notes",
       data: data.rows,
     });
   } catch (error) {

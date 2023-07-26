@@ -48,6 +48,7 @@ router.post("/", async (req, res, next) => {
       username: user.username,
       name: user.name,
       admin: user.admin,
+      user_id: user.user_id,
     });
   } catch (error) {
     return next(error);
