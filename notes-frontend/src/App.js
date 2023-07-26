@@ -17,6 +17,7 @@ import Footer from "./components/Footer";
 import Notes from "./components/Notes";
 import User from "./components/User";
 import { noteService } from "./services/notes";
+import { userService } from "./services/user";
 import { useQuery, useQueryClient } from "react-query";
 import { Routes, Route, Link, Navigate } from "react-router-dom";
 
@@ -69,6 +70,7 @@ function App() {
       const user = JSON.parse(loggedUserJSON);
       setUser(user);
       noteService.setToken(user.token);
+      userService.setToken(user.token);
     }
   }, []);
 
@@ -188,7 +190,13 @@ function App() {
         />
         <Route
           path="/user"
-          element={user ? <User /> : <Navigate replace to="/login" />}
+          element={
+            user ? (
+              <User user={user} queryClient={queryClient} />
+            ) : (
+              <Navigate replace to="/login" />
+            )
+          }
         />
         <Route path="/login" element={<Login setUser={setUser} />} />
         <Route path="/" element={<Home />} />
