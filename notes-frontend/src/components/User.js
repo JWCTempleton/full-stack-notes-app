@@ -2,11 +2,15 @@ import { useMutation, useQuery } from "react-query";
 import { userService } from "../services/user";
 import { Box, Typography, CircularProgress, Button } from "@mui/material";
 import { noteService } from "../services/notes";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Note from "./Note";
+import Toggleable from "./Toggleable";
+import NoteForm from ".//NoteForm";
 
 const User = ({ user, queryClient }) => {
   const [showAll, setShowAll] = useState(true);
+
+  const noteFormRef = useRef();
 
   const result = useQuery(
     "userNotes",
@@ -21,7 +25,8 @@ const User = ({ user, queryClient }) => {
       const notes = queryClient.getQueryData("userNotes");
       queryClient.setQueryData(
         "userNotes",
-        notes.concat([{ ...newNote[0], username: user.username }])
+        // notes.concat([{ ...newNote[0], username: user.username }])
+        [{ ...newNote[0], username: user.username }, ...notes]
       );
     },
   });
@@ -82,6 +87,24 @@ const User = ({ user, queryClient }) => {
         <Typography variant="h6" sx={{ fontWeight: "bold" }}>
           Total notes: {result.data.length}
         </Typography>
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          margin: "0 auto",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: "8px",
+        }}
+      >
+        <Toggleable buttonLabel="New Note" ref={noteFormRef}>
+          <NoteForm
+            user={user}
+            noteFormRef={noteFormRef}
+            queryClient={queryClient}
+            newNoteMutation={newNoteMutation}
+          />
+        </Toggleable>
       </Box>
       <Box
         sx={{
