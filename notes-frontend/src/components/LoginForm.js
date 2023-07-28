@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { loginService } from "../services/login";
 import { noteService } from "../services/notes";
+import { userService } from "../services/user";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -30,6 +31,7 @@ const LoginForm = ({ setUser }) => {
       window.localStorage.setItem("loggedNoteAppUser", JSON.stringify(user));
 
       noteService.setToken(user.token);
+      userService.setToken(user.token);
       setUser(user);
       setUsername("");
       setPassword("");
