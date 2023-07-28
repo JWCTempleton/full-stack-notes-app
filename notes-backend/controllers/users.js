@@ -45,7 +45,7 @@ router.get("/", async (req, res, next) => {
 router.get("/:id", tokenExtractor, async (req, res, next) => {
   try {
     const userNoteQuery =
-      "SELECT n.*, u.user_id, u.username FROM notes n JOIN users u on n.user_id=u.user_id WHERE u.user_id=$1 ORDER BY n.note_id;";
+      "SELECT n.*, u.user_id, u.username FROM notes n JOIN users u on n.user_id=u.user_id WHERE u.user_id=$1 ORDER BY n.note_id DESC;";
     const value = [req.decodedToken.id];
 
     const data = await pool.query(userNoteQuery, value);

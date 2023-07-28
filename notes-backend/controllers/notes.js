@@ -24,7 +24,7 @@ const tokenExtractor = (req, res, next) => {
 router.get("/", async (req, res, next) => {
   try {
     const data = await pool.query(
-      "SELECT n.*, u.user_id, u.username FROM notes n JOIN users u on n.user_id=u.user_id ORDER BY n.note_id DESC;"
+      "SELECT n.*, u.user_id, u.username FROM notes n JOIN users u on n.user_id=u.user_id WHERE n.public=true ORDER BY n.note_id DESC;"
     );
 
     if (data.rowCount == 0) {
