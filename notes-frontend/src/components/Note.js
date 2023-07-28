@@ -53,43 +53,58 @@ const Note = ({ note, user, updateNoteMutation, deleteNoteMutation }) => {
       <Typography>{`Created by: ${note.username}`}</Typography>
 
       {user && user.username === note.username && (
-        <Box sx={{ display: "flex", gap: "10px" }}>
-          <Button
-            variant="outlined"
-            size="small"
-            onClick={() => toggleImportance(note)}
-          >
-            {note.important ? "Important" : "Unimportant"}
-          </Button>
-          <Button
-            variant="contained"
-            size="small"
-            color="error"
-            onClick={handleClickOpen}
-          >
-            Delete
-          </Button>
-          <Dialog
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogTitle id="alert-dialog-title">
-              {"Are you sure you want to delete this note?"}
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                Deleting this note will be permanent.
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose}>Cancel</Button>
-              <Button onClick={() => handleDelete(note)} autoFocus>
-                Agree
-              </Button>
-            </DialogActions>
-          </Dialog>
+        <Box
+          sx={{
+            display: "flex",
+            width: "100%",
+            justifyContent: "space-between",
+          }}
+        >
+          <Box sx={{ display: "flex", gap: "10px" }}>
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={() => toggleImportance(note)}
+            >
+              {note.important ? "Important" : "Unimportant"}
+            </Button>
+            <Button
+              variant="contained"
+              size="small"
+              color="error"
+              onClick={handleClickOpen}
+            >
+              Delete
+            </Button>
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">
+                {"Are you sure you want to delete this note?"}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Deleting this note will be permanent.
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose}>Cancel</Button>
+                <Button onClick={() => handleDelete(note)} autoFocus>
+                  Agree
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </Box>
+          <Box sx={{ alignSelf: "flex-end" }}>
+            {note.public ? (
+              <Typography sx={{ justifySelf: "flex-end" }}>public</Typography>
+            ) : (
+              <Typography>private</Typography>
+            )}
+          </Box>
         </Box>
       )}
     </Item>

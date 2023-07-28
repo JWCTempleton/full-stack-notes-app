@@ -69,15 +69,6 @@ const Notes = ({ user, queryClient }) => {
               gap: "8px",
             }}
           >
-            {/* <Typography>{user.username} logged in</Typography> */}
-            {/* <Button
-              onClick={handleLogout}
-              type="submit"
-              variant="text"
-              size="small"
-            >
-              Logout
-            </Button> */}
             <Toggleable buttonLabel="New Note" ref={noteFormRef}>
               <NoteForm
                 user={user}
