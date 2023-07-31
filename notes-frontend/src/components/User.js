@@ -59,6 +59,10 @@ const User = ({ user, queryClient }) => {
     setShowAll(!showAll);
   };
 
+  let filteredNotes = showAll
+    ? result.data
+    : result.data.filter((n) => n.important === true);
+
   if (result.isLoading) {
     return (
       <Box
@@ -125,7 +129,7 @@ const User = ({ user, queryClient }) => {
         >
           {showAll ? "Important" : "All"}
         </Button>
-        {result.data.map((note) => {
+        {filteredNotes.map((note) => {
           return (
             <Note
               key={note.note_id}
