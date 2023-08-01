@@ -13,34 +13,35 @@ import { userService } from "../services/user";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const LoginForm = ({ setUser }) => {
+const SignUp = ({ setUser }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  const [email, setEmail] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = async (event) => {
-    event.preventDefault();
+  //   const handleLogin = async (event) => {
+  //     event.preventDefault();
 
-    try {
-      const user = await loginService.login({
-        username,
-        password,
-      });
+  //     try {
+  //       const user = await loginService.login({
+  //         username,
+  //         password,
+  //       });
 
-      window.localStorage.setItem("loggedNoteAppUser", JSON.stringify(user));
+  //       window.localStorage.setItem("loggedNoteAppUser", JSON.stringify(user));
 
-      noteService.setToken(user.token);
-      userService.setToken(user.token);
-      setUser(user);
-      setUsername("");
-      setPassword("");
-      console.log("user", user);
-      navigate("/");
-    } catch (exception) {
-      alert("Wrong credentials");
-    }
-  };
+  //       noteService.setToken(user.token);
+  //       userService.setToken(user.token);
+  //       setUser(user);
+  //       setUsername("");
+  //       setPassword("");
+  //       console.log("user", user);
+  //       navigate("/");
+  //     } catch (exception) {
+  //       alert("Wrong credentials");
+  //     }
+  //   };
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -57,12 +58,12 @@ const LoginForm = ({ setUser }) => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Sign Up
           </Typography>
         </Box>
         <Box
           component="form"
-          onSubmit={handleLogin}
+          //   onSubmit={handleLogin}
           noValidate
           sx={{
             mt: 1,
@@ -78,6 +79,16 @@ const LoginForm = ({ setUser }) => {
             name="username"
             autoComplete="username"
             autoFocus
+            onChange={({ target }) => setUsername(target.value)}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email"
+            name="email"
+            autoComplete="email"
             onChange={({ target }) => setUsername(target.value)}
           />
           <TextField
@@ -104,15 +115,15 @@ const LoginForm = ({ setUser }) => {
               justifySelf: "center",
             }}
           >
-            Sign In
+            Submit
           </Button>
           <Box sx={{ display: "flex", justifyContent: "center", gap: "16px" }}>
-            <Link href="#" variant="body2">
+            {/* <Link href="#" variant="body2">
               Forgot password?
             </Link>
-            <Link href="/signup" variant="body2">
+            <Link href="#" variant="body2">
               {"Sign Up"}
-            </Link>
+            </Link> */}
           </Box>
         </Box>
       </Box>
@@ -120,4 +131,4 @@ const LoginForm = ({ setUser }) => {
   );
 };
 
-export default LoginForm;
+export default SignUp;

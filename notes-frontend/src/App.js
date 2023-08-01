@@ -16,6 +16,7 @@ import Home from "./components/Home";
 import Footer from "./components/Footer";
 import Notes from "./components/Notes";
 import User from "./components/User";
+import SignUp from "./components/SignUp";
 import { noteService } from "./services/notes";
 import { userService } from "./services/user";
 import { useQuery, useQueryClient } from "react-query";
@@ -170,6 +171,14 @@ function App() {
               login
             </Link>
           )}
+          {!user && (
+            <Link
+              style={{ padding: "8px", textDecoration: "none" }}
+              to="/signup"
+            >
+              sign up
+            </Link>
+          )}
           {user && (
             <Button
               onClick={handleLogout}
@@ -200,6 +209,7 @@ function App() {
         />
         <Route path="/login" element={<Login setUser={setUser} />} />
         <Route path="/" element={<Home />} />
+        <Route path="/signup" element={<SignUp />} />
       </Routes>
       <Footer />
     </Container>
