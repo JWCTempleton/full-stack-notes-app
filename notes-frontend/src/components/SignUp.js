@@ -20,6 +20,7 @@ const SignUp = ({ setUser }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
   const [alert, setAlert] = useState(false);
+
   const navigate = useNavigate();
 
   //   const handleLogin = async (event) => {
@@ -48,7 +49,80 @@ const SignUp = ({ setUser }) => {
   const handleCreateUser = async (event) => {
     event.preventDefault();
     if (confirmPassword === password) {
-      console.log("USER", { username, password, email });
+      const newUser = await userService.create({ username, email, password });
+      const user = await loginService.login({
+        username,
+        password,
+      });
+      window.localStorage.setItem("loggedNoteAppUser", JSON.stringify(user));
+
+      noteService.setToken(user.token);
+      userService.setToken(user.token);
+      setUser(user);
+      setUsername("");
+      setPassword("");
+      setEmail("");
+      setConfirmPassword("");
+      console.log("user", user);
+      navigate("/");
+
+      //   console.log("USER", { username, password, email });
+      //   try {
+      //     const newUser = userService.create({ username, email, password });
+      //     // setUsername("");
+      //     // setEmail("");
+      //     // setPassword("");
+      //     // setConfirmPassword("");
+      //     // navigate("/login");
+      //     console.log("NEW USER", newUser);
+      //     if (newUser) {
+      //       try {
+      //         const user = await loginService.login({
+      //           username,
+      //           password,
+      //         });
+
+      //         window.localStorage.setItem(
+      //           "loggedNoteAppUser",
+      //           JSON.stringify(user)
+      //         );
+
+      //         noteService.setToken(user.token);
+      //         userService.setToken(user.token);
+      //         setUser(user);
+      //         setUsername("");
+      //         setPassword("");
+      //         setEmail("");
+      //         setConfirmPassword("");
+      //         console.log("user", user);
+      //         navigate("/");
+      //       } catch (exception) {
+      //         console.error("Something went wrong");
+      //       }
+      //     }
+      //   } catch (exception) {
+      //     console.error("Something went wrong");
+      //   }
+      //   try {
+      //     const user = await loginService.login({
+      //       username,
+      //       password,
+      //     });
+
+      //     window.localStorage.setItem("loggedNoteAppUser", JSON.stringify(user));
+
+      //     noteService.setToken(user.token);
+      //     userService.setToken(user.token);
+      //     setUser(user);
+      //     setUsername("");
+      //     setPassword("");
+      //     setEmail("");
+      //     setConfirmPassword("");
+      //     console.log("user", user);
+      //     navigate("/");
+      //   } catch (exception) {
+      //     console.error("Something went wrong");
+      //   }
     } else {
       setAlert(true);
       setTimeout(() => {

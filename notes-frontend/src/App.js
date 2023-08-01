@@ -209,7 +209,7 @@ function App() {
         />
         <Route path="/login" element={<Login setUser={setUser} />} />
         <Route path="/" element={<Home />} />
-        <Route path="/signup" element={<SignUp />} />
+        <Route path="/signup" element={<SignUp setUser={setUser} />} />
       </Routes>
       <Footer />
     </Container>

@@ -16,7 +16,13 @@ const getAllUserNotes = async (user) => {
   return response.data.data;
 };
 
+const create = async (user) => {
+  const response = await axios.post(baseUrl, user);
+  return response.data.data;
+};
+
 export const userService = {
   setToken,
   getAllUserNotes,
+  create,
 };

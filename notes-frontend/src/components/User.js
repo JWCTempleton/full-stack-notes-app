@@ -129,6 +129,11 @@ const User = ({ user, queryClient }) => {
         >
           {showAll ? "Important" : "All"}
         </Button>
+        {
+          (result.data = undefined && (
+            <Typography>No notes to display</Typography>
+          ))
+        }
         {filteredNotes.map((note) => {
           return (
             <Note
