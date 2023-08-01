@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 const SignUp = ({ setUser }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
 
@@ -42,6 +43,13 @@ const SignUp = ({ setUser }) => {
   //     }
   //   };
 
+  const handleCreateUser = async (event) => {
+    event.preventDefault();
+    confirmPassword === password
+      ? console.log("USER", { username, password, email })
+      : console.log("unsuccessful");
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -63,7 +71,7 @@ const SignUp = ({ setUser }) => {
         </Box>
         <Box
           component="form"
-          //   onSubmit={handleLogin}
+          onSubmit={handleCreateUser}
           noValidate
           sx={{
             mt: 1,
@@ -89,7 +97,7 @@ const SignUp = ({ setUser }) => {
             label="Email"
             name="email"
             autoComplete="email"
-            onChange={({ target }) => setUsername(target.value)}
+            onChange={({ target }) => setEmail(target.value)}
           />
           <TextField
             margin="normal"
@@ -102,6 +110,28 @@ const SignUp = ({ setUser }) => {
             autoComplete="current-password"
             onChange={({ target }) => setPassword(target.value)}
           />
+          {confirmPassword.length > 0 && confirmPassword !== password ? (
+            <TextField
+              error
+              fullWidth
+              id="confirmPassword"
+              label="Error"
+              type="password"
+              helperText="Passwords don't match."
+              onChange={({ target }) => setConfirmPassword(target.value)}
+            />
+          ) : (
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="confirmPassword"
+              label="Confirm Password"
+              type="password"
+              id="confirmPassword"
+              onChange={({ target }) => setConfirmPassword(target.value)}
+            />
+          )}
           {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
