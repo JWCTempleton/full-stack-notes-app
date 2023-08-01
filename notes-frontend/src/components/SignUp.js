@@ -4,6 +4,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
+import { Alert } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
@@ -18,6 +19,7 @@ const SignUp = ({ setUser }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [alert, setAlert] = useState(false);
   const navigate = useNavigate();
 
   //   const handleLogin = async (event) => {
@@ -45,9 +47,14 @@ const SignUp = ({ setUser }) => {
 
   const handleCreateUser = async (event) => {
     event.preventDefault();
-    confirmPassword === password
-      ? console.log("USER", { username, password, email })
-      : console.log("unsuccessful");
+    if (confirmPassword === password) {
+      console.log("USER", { username, password, email });
+    } else {
+      setAlert(true);
+      setTimeout(() => {
+        setAlert(false);
+      }, 5000);
+    }
   };
 
   return (
@@ -61,6 +68,11 @@ const SignUp = ({ setUser }) => {
           alignItems: "center",
         }}
       >
+        {alert === true && (
+          <Alert variant="filled" severity="warning">
+            The two passwords did not match.
+          </Alert>
+        )}
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Avatar sx={{ m: 1, bgcolor: "success.main" }}>
             <LockOutlinedIcon />
