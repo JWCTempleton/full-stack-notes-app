@@ -49,9 +49,9 @@ router.get("/:id", tokenExtractor, async (req, res, next) => {
     const value = [req.decodedToken.id];
 
     const data = await pool.query(userNoteQuery, value);
-    if (data.rowCount == 0) {
-      return res.status(404).send("No notes exist");
-    }
+    // if (data.rowCount == 0) {
+    //   return res.status(404).send("No notes exist");
+    // }
 
     return res.status(200).json({
       status: 200,
