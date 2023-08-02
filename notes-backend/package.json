@@ -13,6 +13,7 @@
     "migrate": "node-pg-migrate",
     "test": "jest --verbose --runInBand"
   },
+  "homepage": ".",
   "author": "JWCTempleton",
   "license": "ISC",
   "dependencies": {
@@ -22,6 +23,7 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
     "node-pg-migrate": "^6.2.2",
+    "path": "^0.12.7",
     "pg": "^8.11.0"
   },
   "engines": {
