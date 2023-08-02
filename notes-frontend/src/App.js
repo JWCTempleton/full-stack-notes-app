@@ -208,8 +208,8 @@ function App() {
           }
         />
         <Route path="/login" element={<Login setUser={setUser} />} />
-        <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignUp setUser={setUser} />} />
+        <Route path="/" element={<Home />} />
       </Routes>
       <Footer />
     </Container>
