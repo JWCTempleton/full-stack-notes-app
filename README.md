@@ -31,3 +31,13 @@ app.get("*", function (req, res) {
 });
 
 ```
+
+Another issue that popped up live that wasn't present in local was the token not being recognized: I was getting an error stating secretOrPrivateKey must have a value. This was confusing because the environment variables were set up seemingly correctly and, again, it was working in local. The solution after googling the Error was to wrap my .env variable in a template literal expression in this way:
+`${process.env.YourEnvSecretVarable}`
+That solved the problem, no more errors and the token was passed successfully.
+
+## What I would like to add going forward
+
+There are a few additions I want to add to the project. One is the addition of an admin panel which can be used to delete problematic messages and to remove the ability to log in for problematic users.
+
+Another big change I would like to add to the project is to change the backend communication set up from a resource based REST API to a GraphQL based server. While the REST implementation is working well and this project doesn't necessitate a more complex GraphQL implementation for the server, I would like to learn more about GraphQL and I think it would be a fun addition to the project.
