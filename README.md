@@ -33,7 +33,7 @@ app.get("*", function (req, res) {
 ```
 
 Another issue that popped up live that wasn't present in local was the token not being recognized: I was getting an error stating secretOrPrivateKey must have a value. This was confusing because the environment variables were set up seemingly correctly and, again, it was working in local. The solution after googling the Error was to wrap my .env variable in a template literal expression in this way:
-`${process.env.YourEnvSecretVarable}`
+`${process.env.YourEnvSecretVariable}`
 That solved the problem, no more errors and the token was passed successfully.
 
 ## What I would like to add going forward
