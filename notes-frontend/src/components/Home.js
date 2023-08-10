@@ -4,7 +4,13 @@ import { Link } from "react-router-dom";
 const Home = () => {
   return (
     <div
-      style={{ minHeight: "85vh", display: "flex", flexDirection: "column" }}
+      style={{
+        minHeight: "85vh",
+        display: "flex",
+        flexDirection: "column",
+        maxWidth: "70vw",
+        margin: "0 auto",
+      }}
     >
       <Typography variant="h5" sx={{ pt: 4, pl: 3 }}>
         Welcome to the note app
