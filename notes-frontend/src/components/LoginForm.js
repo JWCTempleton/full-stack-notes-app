@@ -29,6 +29,7 @@ const LoginForm = ({ setUser }) => {
       });
 
       window.localStorage.setItem("loggedNoteAppUser", JSON.stringify(user));
+      window.localStorage.setItem("loggedInTime", Date.now());
 
       noteService.setToken(user.token);
       userService.setToken(user.token);

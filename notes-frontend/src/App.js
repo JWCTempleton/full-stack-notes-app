@@ -25,9 +25,21 @@ function App() {
 
   const queryClient = useQueryClient();
 
+  const handleLogout = () => {
+    window.localStorage.removeItem("loggedNoteAppUser");
+    window.localStorage.removeItem("loggedInTime");
+    setUser(null);
+  };
+
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedNoteAppUser");
-    if (loggedUserJSON) {
+    const loggedIn = window.localStorage.getItem("loggedInTime");
+    console.log("TIME", loggedIn);
+    const expiredCredentials = Number(loggedIn) + 600000 * 10;
+
+    if (loggedUserJSON && expiredCredentials < Date.now()) {
+      handleLogout();
+    } else if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
       setUser(user);
       noteService.setToken(user.token);
@@ -59,11 +71,6 @@ function App() {
       </Box>
     );
   }
-
-  const handleLogout = () => {
-    window.localStorage.removeItem("loggedNoteAppUser");
-    setUser(null);
-  };
 
   return (
     <Container>
