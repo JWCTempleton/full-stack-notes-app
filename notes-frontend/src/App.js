@@ -16,6 +16,7 @@ import SignUp from "./components/SignUp";
 import NotFound from "./components/NotFound";
 import { noteService } from "./services/notes";
 import { userService } from "./services/user";
+import { userCheck } from "./services/userCheck";
 import { useQuery, useQueryClient } from "react-query";
 import { Routes, Route, Link, Navigate } from "react-router-dom";
 
@@ -31,20 +32,38 @@ function App() {
     setUser(null);
   };
 
+  // useEffect(() => {
+  //   const loggedUserJSON = window.localStorage.getItem("loggedNoteAppUser");
+  //   const loggedIn = window.localStorage.getItem("loggedInTime");
+  //   console.log("TIME", loggedIn);
+  //   const expiredCredentials = Number(loggedIn) + 600000 * 6;
+
+  //   if (loggedUserJSON && expiredCredentials < Date.now()) {
+  //     handleLogout();
+  //   } else if (loggedUserJSON) {
+  //     const user = JSON.parse(loggedUserJSON);
+  //     setUser(user);
+  //     noteService.setToken(user.token);
+  //     userService.setToken(user.token);
+  //   }
+  // }, []);
+
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedNoteAppUser");
-    const loggedIn = window.localStorage.getItem("loggedInTime");
-    console.log("TIME", loggedIn);
-    const expiredCredentials = Number(loggedIn) + 600000 * 10;
-
-    if (loggedUserJSON && expiredCredentials < Date.now()) {
-      handleLogout();
-    } else if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON);
-      setUser(user);
-      noteService.setToken(user.token);
-      userService.setToken(user.token);
-    }
+    const user = JSON.parse(loggedUserJSON);
+    console.log("USER", user);
+    user && userCheck.setToken(user.token);
+    user &&
+      userCheck.checkUser().then((response) => {
+        console.log("RESPONSE", response);
+        if (response === undefined) {
+          handleLogout();
+        } else {
+          setUser(user);
+          noteService.setToken(user.token);
+          userService.setToken(user.token);
+        }
+      });
   }, []);
 
   const result = useQuery("notes", noteService.getAll, {
