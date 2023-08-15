@@ -7,6 +7,7 @@ const dotenv = require("dotenv");
 const usersRouter = require("./controllers/users");
 const loginRouter = require("./controllers/login");
 const noteRouter = require("./controllers/notes");
+const checkRouter = require("./controllers/userCheck");
 const logger = require("./utils/logger");
 const middleware = require("./utils/middleware");
 
@@ -29,6 +30,7 @@ app.use(
 app.use("/api/users", usersRouter);
 app.use("/api/login", loginRouter);
 app.use("/api/notes", noteRouter);
+app.use("/api/userCheck", checkRouter);
 
 // app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);

@@ -10,7 +10,7 @@ const tokenExtractor = (req, res, next) => {
     try {
       req.decodedToken = jwt.verify(
         authorization.substring(7),
-        `${process.env.SECRET}`
+        process.env.SECRET
       );
     } catch {
       return res.status(401).json({ error: "token invalid" });
@@ -44,7 +44,7 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:id", async (req, res, next) => {
   const id = parseInt(req.params.id);
-  const query = "SELECT * FROM notes WHERE note_id=$1";
+  const query = "SELECT * FROM notes WHERE note_id=$1 and notes.public=true";
   const value = [id];
 
   try {
