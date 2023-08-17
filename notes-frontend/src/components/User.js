@@ -28,6 +28,13 @@ const User = ({ user, queryClient }) => {
         // notes.concat([{ ...newNote[0], username: user.username }])
         [{ ...newNote[0], username: user.username }, ...notes]
       );
+      if (newNote[0].public === true) {
+        const allNotes = queryClient.getQueryData("notes");
+        queryClient.setQueryData("notes", [
+          { ...newNote[0], username: user.username },
+          ...allNotes,
+        ]);
+      }
     },
   });
 
