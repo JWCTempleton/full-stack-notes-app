@@ -17,6 +17,7 @@ const User = ({ user, queryClient }) => {
     () => userService.getAllUserNotes(user),
     {
       refetchOnWindowFocus: false,
+      refetchOnMount: false,
     }
   );
 
@@ -49,6 +50,17 @@ const User = ({ user, queryClient }) => {
             : { ...newNote[0], username: user.username }
         )
       );
+      if (newNote[0].public === true) {
+        const allNotes = queryClient.getQueryData("notes");
+        queryClient.setQueryData(
+          "notes",
+          allNotes.map((note) =>
+            note.note_id !== newNote[0].note_id
+              ? note
+              : { ...newNote[0], username: user.username }
+          )
+        );
+      }
     },
   });
 
@@ -59,6 +71,13 @@ const User = ({ user, queryClient }) => {
         "userNotes",
         notes.filter((n) => n.note_id !== newNote[0].note_id)
       );
+      if (newNote[0].public === true) {
+        const allNotes = queryClient.getQueryData("notes");
+        queryClient.setQueryData(
+          "notes",
+          allNotes.filter((n) => n.note_id !== newNote[0].note_id)
+        );
+      }
     },
   });
 
