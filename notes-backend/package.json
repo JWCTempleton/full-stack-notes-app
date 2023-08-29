@@ -27,7 +27,7 @@
     "pg": "^8.11.0"
   },
   "engines": {
-    "node": "18.16.1"
+    "node": ">=18.16.1"
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.2.15",
