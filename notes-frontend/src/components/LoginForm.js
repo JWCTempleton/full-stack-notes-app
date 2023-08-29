@@ -108,9 +108,9 @@ const LoginForm = ({ setUser }) => {
             Sign In
           </Button>
           <Box sx={{ display: "flex", justifyContent: "center", gap: "16px" }}>
-            <Link href="#" variant="body2">
+            {/* <Link href="#" variant="body2">
               Forgot password?
-            </Link>
+            </Link> */}
             <Link href="/signup" variant="body2">
               {"Sign Up"}
             </Link>

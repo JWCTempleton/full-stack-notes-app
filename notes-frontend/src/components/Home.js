@@ -30,7 +30,7 @@ const Home = () => {
       <Typography sx={{ pl: 3, pt: 1 }}>
         Want to get started?
         <Link
-          to="/login"
+          to="/signup"
           style={{ paddingLeft: "6px", textDecoration: "none" }}
         >
           Click here to create an account
