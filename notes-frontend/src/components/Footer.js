@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
 
 const styles = {
-  width: "100vw",
+  width: "90vw",
   height: "40px",
   padding: "20px 0",
   display: "flex",

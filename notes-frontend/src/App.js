@@ -76,7 +76,6 @@ function App() {
     return (
       <Box
         sx={{
-          width: "100vw",
           height: "60px",
           display: "flex",
           flexDirection: "column",
@@ -92,10 +91,16 @@ function App() {
   }
 
   return (
-    <Container>
+    <Container
+      style={{
+        maxWidth: "90vw",
+        overflow: "none",
+        padding: 0,
+        margin: "0 auto",
+      }}
+    >
       <div
         style={{
-          width: "95vw",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
